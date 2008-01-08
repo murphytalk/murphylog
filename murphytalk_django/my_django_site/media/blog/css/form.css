@@ -1,0 +1,133 @@
+/* Layout ******************/
+form {
+  margin:0;
+}
+
+form p {
+  overflow:hidden;
+}
+
+form label,
+form .vTextField {
+  float:left;
+}
+
+
+form {
+  width:35em;
+}
+
+form label {
+  width:14.5em;
+}
+
+form .vTextField {
+  width:19em;
+}
+
+#tag_widget li,
+#tag_widget p {
+  float:left;
+}
+
+#tag_widget input {
+  width:5em;
+}
+
+/* Fonts *******************/
+
+body,
+input,
+button {
+  font:small Tahoma, Verdana, Arial, sans-serif;
+}
+
+#tag_widget .output {
+  font-weight:bold;
+}
+
+/* Colors ******************/
+
+body {
+  background:white; color:black;
+}
+
+#input {
+  background:white; color:black;
+  border-color:#444 #AAA #AAA #444;
+}
+
+#button {
+  background:#888; color:white;
+  border-color:#AAA #444 #444 #AAA;
+  }
+
+fieldset {
+  border-color:#888;
+}
+
+#.buttons {
+  background:#CCC;
+}
+
+/* Misc ********************/
+
+form {
+  padding-top:1px;
+}
+
+input,textarea,select {
+  border-style:solid; border-width:1px;
+}
+
+button {
+  border-style:solid; border-width:1px;
+  padding:0 0.5em;
+}
+
+fieldset {
+  padding:0.5em;
+  border-style:solid; border-width:1px;
+}
+
+form p,
+form fieldset,
+form ul {
+  margin:0.5em;
+}
+
+#tag_widget ul {
+  padding:0; margin:0;
+}
+
+#tag_widget li {
+  list-style:none;
+  margin:0; padding:1px 1em 1px 0;
+}
+
+#tag_widget p {
+  margin:0; padding:1px;
+}
+
+#tag_widget .input img {
+  vertical-align:0;
+}
+
+* html #tag_widget .input img {
+  vertical-align:3px;
+}
+
+#tag_widget .output img,
+#tag_widget p img {
+  vertical-align:-2px;
+}
+
+.buttons {
+  padding:0.5em;
+  text-align:right;
+}
+
+td.td0 {width:20%;text-align: left; vertical-align:middle}
+td.td1 {width:20%;text-align: left; vertical-align:top}
+td.td2 {width:80%;vertical-align:top}
+

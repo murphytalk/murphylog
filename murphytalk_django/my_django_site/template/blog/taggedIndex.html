@@ -1,0 +1,13 @@
+{% load i18n %}
+{% load murphymarkup%}
+{% extends "blog/index.html" %}
+{% block taginfo%}
+<h3>{{tag_name}}
+{% if tag_note %}
+{% ifnotequal tag_name tag_note %}
+  - {{tag_note}}
+{% endifnotequal%}
+{% endif %}
+:&nbsp; {% blocktrans with hits as hit%} {{hit}} posts {% endblocktrans %}
+</h2>
+{% endblock %}

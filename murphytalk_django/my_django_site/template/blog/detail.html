@@ -1,0 +1,53 @@
+{% load i18n %}
+{% load murphymarkup.murphymarkup%}
+{% load comments.comments %}
+{% load murphylog_template_tags%}
+{% extends "blog/base.html" %}
+
+{% block content %}
+
+{%comment%}
+break_weekday -> �滻Sunday,YYYY-MM-DDΪSunday<BR>YYYY-MM-DD
+{%endcomment%}
+<h3 class="date"> {{entry.post_date|date:"l,Y-m-d"|break_weekday}} </h3>
+
+{% include "blog/entry.html" %}
+
+{% get_free_comment_count for murphylog.entry entry.id as comment_count %}
+
+<h5>{%blocktrans%} Comments ({{comment_count}}) {%endblocktrans%} </h5>
+
+<a style="margin: 0px; padding: 0px; font-size: 1px;" id="c40"></a>
+
+{% ifnotequal comment_count 0 %}
+<div id="comments_div">
+<ol class="comments" id="comments">
+  {% get_free_comment_list for murphylog.entry entry.id as comment_list reversed %}
+    {% for comment in comment_list %}
+	<li class="comment" id="c{{ comment.id }}">
+		<span class="comnum"><a id="c{{ comment.id }}" href="#c{{ comment.id }}">#{{ forloop.counter }}</a></span>
+		{% blocktrans with comment.person_name as pname and comment.submit_date|date:"Y-m-d H:i:s" as pdate %}<p><b>{{ pname }}</b> commented on {{pdate}}</p> {% endblocktrans %}
+		{{ comment.comment|escape|urlizetrunc:40|linebreaks }}
+	</li>
+{% endfor %}
+</ol>
+</div>
+
+{% endifnotequal %}
+
+<br>
+  
+<!-- hr style="height: 1px;" -->
+<h5><a id="writecomment" style="text-decoration: none;"> </a>
+  {%trans "Write a comment" %}
+</h5>
+
+{% free_comment_form for murphylog.entry entry.id %}
+
+{%comment%}
+<address >&bull; <a href="javascript: history.go(-{{back_steps}})">Back</a></address>
+{%endcomment%}
+
+<BR>
+
+{% endblock %}

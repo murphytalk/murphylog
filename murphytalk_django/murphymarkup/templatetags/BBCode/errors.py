@@ -1,0 +1,2 @@
+class MarkupSyntaxError(ValueError):
+    pass

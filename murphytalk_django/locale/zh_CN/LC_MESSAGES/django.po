@@ -1,0 +1,192 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-10-25 22:44+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: tags/fields.py:32
+#, python-format
+msgid "Ensure your text is less than %s character."
+msgid_plural "Ensure your text is less than %s characters."
+msgstr[0] ""
+msgstr[1] ""
+
+#: murphylog/templates/comments/free_preview.html:8
+#, fuzzy
+msgid "Preview your comment"
+msgstr "預覽"
+
+#: murphylog/templates/comments/free_preview.html:15
+#, python-format
+msgid "Posted by <strong>%(pname)s</strong>"
+msgstr "<strong>%(pname)s</strong>道"
+
+#: murphylog/templates/comments/free_preview.html:19
+msgid "Post public comment"
+msgstr "貼出去！"
+
+#: murphylog/templates/comments/free_preview.html:21
+msgid "Or edit it again"
+msgstr "要不再改一下？"
+
+#: murphylog/templates/comments/free_preview.html:28
+#: murphylog/templates/comments/freeform.html:4
+msgid "Your name:"
+msgstr "尊姓大名"
+
+#: murphylog/templates/comments/free_preview.html:35
+#: murphylog/templates/comments/freeform.html:5
+msgid "Comment:"
+msgstr "金玉良言"
+
+#: murphylog/templates/comments/free_preview.html:45
+msgid "Preview revised comment"
+msgstr "預覽"
+
+#: murphylog/templates/comments/freeform.html:10
+msgid "Preview comment"
+msgstr "預覽"
+
+#: my_django_site/template/404.html:4
+msgid "Restricted Area"
+msgstr ""
+
+#: my_django_site/template/404.html:19
+msgid "You are not supposed to be here,plase go back to"
+msgstr "機房重地 閒人免進！請回"
+
+#: my_django_site/template/404.html:20
+#: my_django_site/template/blog/base.html:27
+msgid "Home"
+msgstr "首頁"
+
+#: my_django_site/template/blog/index.html:28
+msgid "Select page for older posts"
+msgstr "選頁"
+
+#: my_django_site/template/blog/detail.html:18
+#, fuzzy, python-format
+msgid " Comments (%(comment_count)s) "
+msgstr " \"有%(comment_count)s 條留言\" "
+
+#: my_django_site/template/blog/detail.html:29
+#, python-format
+msgid "<p><b>%(pname)s</b> commented on %(pdate)s</p> "
+msgstr "<p><b>%(pname)s</b> 留言於%(pdate)s</p> "
+
+#
+#: my_django_site/template/blog/detail.html:42
+msgid "Write a comment"
+msgstr "請賜言"
+
+#: my_django_site/template/blog/taggedIndex.html:11
+msgid " %(hit)s posts "
+msgstr "共 %(hit)s 貼"
+
+#: my_django_site/template/blog/entry.html:19
+msgid "Click to read"
+msgstr "點閲讀"
+
+#: my_django_site/template/blog/entry.html:34
+msgid "Read more"
+msgstr "繼續閲讀"
+
+#: my_django_site/template/blog/entry.html:50
+msgid "entry_tag"
+msgstr "entry_tag_chinese"
+
+#: my_django_site/template/blog/entry.html:51
+#, python-format
+msgid ""
+" Posted by <a href=\"mailto:%(email)s\">%(owner)s</a> at %(pdate)s | last "
+"edited at %(ledit)s"
+msgstr ""
+" <a href=\"mailto:%(email)s\">%(owner)s</a> 發表於 %(pdate)s | 最後修改於 %"
+"(ledit)s"
+
+#: my_django_site/template/blog/entry.html:54
+msgid "Edit this article"
+msgstr "編輯"
+
+#: my_django_site/template/blog/entry.html:57
+#: my_django_site/template/blog/base.html:76
+msgid "Comments"
+msgstr "留言"
+
+#: my_django_site/template/blog/entry.html:60
+msgid "This is a <font color=red>private</font> post"
+msgstr "本貼<font color=red>保密</font>"
+
+#: my_django_site/template/blog/entry.html:62
+msgid "Tags :"
+msgstr "標簽："
+
+#: my_django_site/template/blog/base.html:28
+msgid " %(pn)s posts "
+msgstr "共 %(pn)s 貼"
+
+#: my_django_site/template/blog/base.html:31
+msgid "New post"
+msgstr "發新貼"
+
+#: my_django_site/template/blog/base.html:32
+#, python-format
+msgid "logged in as %(uname)s "
+msgstr "以%(uname)s身份登録"
+
+#: my_django_site/template/blog/base.html:33
+msgid "logout"
+msgstr "登出"
+
+#: my_django_site/template/blog/base.html:51
+msgid "Search"
+msgstr "搜索"
+
+#: my_django_site/template/blog/base.html:59
+msgid "Tags"
+msgstr "標簽"
+
+#: my_django_site/template/blog/base.html:70
+msgid "Links"
+msgstr "鏈接"
+
+#: my_django_site/template/blog/base.html:80
+#, python-format
+msgid "Commented by %(pname)s on %(pdate)s "
+msgstr "%(pname)s 留言於%(pdate)s"
+
+#: my_django_site/template/blog/base.html:90
+msgid "Powered by Lighttpd"
+msgstr "本站由Lighttpd提供動力"
+
+#: my_django_site/template/blog/base.html:94
+msgid "Edit in Emacs"
+msgstr "本站用Emacs編輯"
+
+#: my_django_site/template/blog/base.html:98
+msgid "Powered by Django"
+msgstr "本站用Django製作"
+
+#: my_django_site/template/blog/base.html:102
+msgid "Powered by Python"
+msgstr "本站由Python提供動力"
+
+#: my_django_site/template/blog/base.html:106
+msgid "Proud Slacker since 3.6"
+msgstr "始自3.6版的忠實Slackware用戶"
+
+#: my_django_site/template/blog/base.html:110
+msgid "Powered by MySQL"
+msgstr "本站由MySQL提供動力"
