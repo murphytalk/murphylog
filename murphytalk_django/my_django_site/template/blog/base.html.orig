@@ -1,3 +1,4 @@
+{% spaceless %}
 {% load i18n %}
 <!DOCTYPE html PUBLIC "-/W3C/DTD XHTML 1.0 Strict/EN" "http:/www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html  lang="zh-TW" dir="ltr" xml:lang="zh-TW" xmlns="http:/www.w3.org/1999/xhtml">
@@ -154,19 +155,7 @@ Google CSE Search Box Ends -->
   Trust is hard to earn,easy to lose,and almost impossible to take back.
 </div>
 
-  <link rel="stylesheet" type="text/css" href="/media/blog/dp.SyntaxHighlighter/Styles/SyntaxHighlighter.css" />
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shCore.js"></script>
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shBrushCSharp.js"></script>
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shBrushXml.js"></script>
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shBrushPython.js"></script>
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shBrushCpp.js"></script>
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shBrushJScript.js"></script>
-  <script language="javascript">
-    dp.SyntaxHighlighter.HighlightAll('code');
-  </script>
-
-
-
 </body>
 
 </html>
+{% endspaceless %}

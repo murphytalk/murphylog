@@ -10,8 +10,6 @@ from murphytalk_django.murphymarkup.templatetags.TextType.stx import stx2html
 from murphytalk_django.murphymarkup.templatetags.BBCode.default import content2html
 from murphytalk_django.murphymarkup.templatetags.utils import processSmileys
 
-import murphytalk_django.murphymarkup.templatetags.enhanced_docutils
-
 register = template.Library()
 
 #reStructuredText with smileyfaces
@@ -25,8 +23,7 @@ def myRestructuredtext(value):
         return value
     else:
         docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
-        #parts = publish_parts(source=value, writer_name="html4css1", settings_overrides=docutils_settings)
-        parts = publish_parts(source=value, writer_name="myhtml", settings_overrides=docutils_settings)
+        parts = publish_parts(source=value, writer_name="html4css1", settings_overrides=docutils_settings)
         return processSmileys(parts["fragment"])
 
 register.filter(myRestructuredtext)

@@ -2,7 +2,7 @@
 
 # Django settings for murphytalk_django project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 LINUX = True
@@ -110,8 +110,3 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 #tags app的路径设置
 STYLE_URL = "/media/tags/"
 JS_URL    = "/media/tags/"
-
-
-RESTRUCTUREDTEXT_FILTER_SETTINGS={'file_insertion_enabled': 0,
-                                  'raw_enabled': 0,
-                                  '_disable_config': 1}
