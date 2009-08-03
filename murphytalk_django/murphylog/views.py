@@ -39,7 +39,7 @@ def get_basic_context(tag_id=None):
         tags = Tag.objects.all()
 
         local_tag_list = []
-    
+
         for t in tags:
             entries= Entry.objects.filter(tags=t.id)
             count = entries.count()
@@ -53,7 +53,7 @@ def get_basic_context(tag_id=None):
             avg = sumv / tags_count
         else:
             avg = 1
-        
+
         #set font size
         for t in local_tag_list:
             font_size = 100*t[3]/avg
@@ -61,7 +61,7 @@ def get_basic_context(tag_id=None):
                 font_size = 200
             elif font_size < 90:
                 font_size = 90
-                
+
             t.append(font_size) #t[4]
 
         return local_tag_list
@@ -105,20 +105,20 @@ def do_index(request,entries,page_num=None,tag_id=None):
     tag_total_posts_num = entries.count()
 
     pages = tag_total_posts_num/POSTS_PER_PAGE
-    
+
     if (tag_total_posts_num%POSTS_PER_PAGE)>0:
         pages=pages+1
 
     #extra context passed to template
     my_extra_context = get_basic_context(tag_id)
-    my_extra_context["page_range"]=range(1,pages+1) #page range                          
+    my_extra_context["page_range"]=range(1,pages+1) #page range
     my_extra_context["user"]      =request.user     #user object
-    
+
     if tag_id is None:
-        templateName="blog/index.html"
+        templateName="blog/index.djhtml"
     else:
-        templateName="blog/taggedIndex.html"        
-        
+        templateName="blog/taggedIndex.djhtml"
+
     return object_list(request,
                        entries,
                        page          = page_num,
@@ -143,8 +143,8 @@ def index(request,page=None):
 def detail(request,eid,highlightWord=None):
     """
     URL: /blog/<entry id>
-    """    
-    total_posts_num = Entry.objects.all().count()    
+    """
+    total_posts_num = Entry.objects.all().count()
 
     entry=Entry.objects.filter(id=eid)
 
@@ -156,7 +156,7 @@ def detail(request,eid,highlightWord=None):
     my_extra_context["highlight_keyword" ]=highlightWord
 
     return object_detail(request,Entry.objects.all(),object_id=eid,
-                         template_name='blog/detail.html',
+                         template_name='blog/detail.djhtml',
                          extra_context=my_extra_context,
                          template_object_name='entry')
 
@@ -174,8 +174,8 @@ def taggedIndex(request,tag_id,page=None):
     """
     entries = Entry.objects.filter(tags=tag_id).order_by('-id')
     return do_index(request,entries,page_num=page,tag_id=tag_id)
-    
-    
+
+
 def login(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -197,7 +197,7 @@ def update(request,eid):
     """
     if request.user.id != Entry.objects.get(id=eid).owner.id:
         return django.http.HttpResponsePermanentRedirect('/blog/')
-        
+
     #remember current user
     murphytalk_django.murphylog.models.me = request.user
 
@@ -221,18 +221,18 @@ def update(request,eid):
         my_extra_context["update_post"]=True
         #passin count of comments,only display delete button for posts with 0 comment
         my_extra_context["comment_count"]=FreeComment.objects.filter(object_id=int(eid)).count()
-        
+
         result = update_object(request,Entry,object_id=eid,
                                login_required=True,
                                post_save_redirect="/blog/entryposted/%(id)s/",#goto posted detail page after posted
-                               template_name="blog/update_entry.html",
+                               template_name="blog/update_entry.djhtml",
                                extra_context=my_extra_context,
                                follow={"post_date":False,"last_edit":False})
 
     Entry.ChangeManipulator = default_manipulator
 
     return result
-    
+
 # create a new entry
 def new(request):
     """
@@ -244,7 +244,7 @@ def new(request):
 
     #remember current user
     murphytalk_django.murphylog.models.me = request.user
-        
+
     default_manipulator=Entry.AddManipulator # seems admin is not happy with our customise manipulator
                                              # have to restore the default one after we are done
     Entry.AddManipulator = Entry.EntryAddManipulator
@@ -254,7 +254,7 @@ def new(request):
     result = create_object(request,Entry,
                            login_required=True,
                            post_save_redirect="/blog/entryposted/%(id)s/",#goto posted detail page after posted
-                           template_name="blog/update_entry.html",
+                           template_name="blog/update_entry.djhtml",
                            extra_context=my_extra_context)
 
     Entry.AddManipulator = default_manipulator
@@ -278,7 +278,7 @@ def commentPosted(request):
     else:
         cid,eid=c.split(':')
         return postedDetail(request,eid)
-    
+
 
 #search
 def search(request,searchFor=None):
@@ -288,5 +288,4 @@ def search(request,searchFor=None):
     urlcmd='p='+searchFor
     searchFor=cgi.parse_qs(urlcmd)['p'][0]
     entries = Entry.objects.filter(Q(title__icontains=searchFor)|Q(subject__icontains=searchFor)|Q(text__icontains=searchFor)).order_by("-id")
-    return render_to_response('blog/search_result.html',{"keyword":searchFor,"entries":entries})
-
+    return render_to_response('blog/search_result.djhtml',{"keyword":searchFor,"entries":entries})
