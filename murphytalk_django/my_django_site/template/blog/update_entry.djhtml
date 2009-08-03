@@ -1,6 +1,6 @@
 {% load murphymarkup.murphymarkup%}
 {% load comments.comments %}
-{% extends "blog/base.html" %}
+{% extends "blog/base.djhtml" %}
 
 {% block content %}
 
@@ -43,7 +43,7 @@
 	{{form.text_type}}
       </td>
     </tr>
-    
+
     <tr>
       <td class="td1">
 	<label for="id_private">Private</label>
@@ -59,15 +59,13 @@
     {{form.tags}}
   </fieldset>
   <input name= "post" type="submit" value="Post" >
-  <input name="cancel" type="submit" value="Cancel" onclick="history.back()"> 
+  <input name="cancel" type="submit" value="Cancel" onclick="history.back()">
   {% if update_post %}
     {% ifequal comment_count 0 %}
-        <input name="delete" type="submit" value="Delete" style="color:red"> 
+        <input name="delete" type="submit" value="Delete" style="color:red">
     {% endifequal%}
   {% endif%}
 </form>
 
 
 {% endblock %}
-
-

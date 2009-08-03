@@ -2,7 +2,7 @@
 {% load murphymarkup.murphymarkup%}
 {% load comments.comments %}
 {% load murphylog_template_tags%}
-{% extends "blog/base.html" %}
+{% extends "blog/base.djhtml" %}
 
 {% block content %}
 
@@ -11,7 +11,7 @@ break_weekday -> �滻Sunday,YYYY-MM-DDΪSunday<BR>YYYY-MM-DD
 {%endcomment%}
 <h3 class="date"> {{entry.post_date|date:"l,Y-m-d"|break_weekday}} </h3>
 
-{% include "blog/entry.html" %}
+{% include "blog/entry.djhtml" %}
 
 {% get_free_comment_count for murphylog.entry entry.id as comment_count %}
 
@@ -38,7 +38,7 @@ break_weekday -> �滻Sunday,YYYY-MM-DDΪSunday<BR>YYYY-MM-DD
 {%comment%}
 
 <br>
-  
+
 <!-- hr style="height: 1px;" -->
 <h5><a id="writecomment" style="text-decoration: none;"> </a>
   {%trans "Write a comment" %}

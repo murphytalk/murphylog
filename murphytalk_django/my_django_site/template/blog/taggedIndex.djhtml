@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load murphymarkup%}
-{% extends "blog/index.html" %}
+{% extends "blog/index.djhtml" %}
 {% block taginfo%}
 <h3>{{tag_name}}
 {% if tag_note %}

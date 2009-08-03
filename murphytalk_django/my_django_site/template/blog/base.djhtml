@@ -154,15 +154,16 @@ Google CSE Search Box Ends -->
   Trust is hard to earn,easy to lose,and almost impossible to take back.
 </div>
 
-  <link rel="stylesheet" type="text/css" href="/media/blog/dp.SyntaxHighlighter/Styles/SyntaxHighlighter.css" />
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shCore.js"></script>
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shBrushCSharp.js"></script>
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shBrushXml.js"></script>
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shBrushPython.js"></script>
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shBrushCpp.js"></script>
-  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/Scripts/shBrushJScript.js"></script>
+  <link rel="stylesheet" type="text/css" href="/media/blog/dp.SyntaxHighlighter/styles/shCore.css" />
+  <link rel="stylesheet" type="text/css" href="/media/blog/dp.SyntaxHighlighter/styles/shThemeDefault.css" />
+  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/scripts/shCore.js"></script>
+  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/scripts/shBrushCSharp.js"></script>
+  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/scripts/shBrushXml.js"></script>
+  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/scripts/shBrushPython.js"></script>
+  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/scripts/shBrushCpp.js"></script>
+  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/scripts/shBrushJScript.js"></script>
   <script language="javascript">
-    dp.SyntaxHighlighter.HighlightAll('code');
+    SyntaxHighlighter.all();
   </script>
 
 

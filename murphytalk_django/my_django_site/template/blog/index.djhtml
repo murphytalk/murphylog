@@ -1,5 +1,5 @@
 {% load i18n %}
-{% extends "blog/base.html" %}
+{% extends "blog/base.djhtml" %}
 
 {% load murphylog_template_tags%}
 {% block taginfo%} {% endblock %}
@@ -14,7 +14,7 @@
         <h3 class="date">{{ group.grouper|break_weekday}}</h3>
         {% for entry in group.list %}
 
-	{% include "blog/entry.html" %}
+	{% include "blog/entry.djhtml" %}
 
 	{% endfor %}
 
