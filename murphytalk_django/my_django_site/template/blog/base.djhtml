@@ -162,7 +162,9 @@ Google CSE Search Box Ends -->
   <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/scripts/shBrushPython.js"></script>
   <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/scripts/shBrushCpp.js"></script>
   <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/scripts/shBrushJScript.js"></script>
+  <script language="javascript" src="/media/blog/dp.SyntaxHighlighter/scripts/shBrushBash.js"></script>
   <script language="javascript">
+    SyntaxHighlighter.defaults['ruler'] = true;
     SyntaxHighlighter.all();
   </script>
 

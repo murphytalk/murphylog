@@ -54,7 +54,8 @@ class MyHtmlWriter(Writer):
 class MyHTMLTranslator(HTMLTranslator):
     def visit_literal_block(self, node):
         if hasattr(node,'option') and node.option.has_key('syntax'):
-            self.body.append(self.starttag(node, 'pre', NAME='code',CLASS=node.option['syntax']))
+            #self.body.append(self.starttag(node, 'pre', NAME='code',CLASS=node.option['syntax'])) #syntaxhighlight 1.5
+            self.body.append(self.starttag(node, 'pre',CLASS="brush:"+node.option['syntax']))      #syntaxhighlight 2.0
         else:
             HTMLTranslator.visit_literal_block(self,node)
 
