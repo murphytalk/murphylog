@@ -149,6 +149,11 @@
 	border: solid #E7E7EF 1px;
 
 	padding: 0.5em;
+
+	font-family: "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
+	font-weight: normal !important;
+	font-style: normal !important;
+	font-size: 1em !important;
 }
 
 
