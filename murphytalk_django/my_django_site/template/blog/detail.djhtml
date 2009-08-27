@@ -1,24 +1,29 @@
-{% load i18n %}
-{% load murphymarkup.murphymarkup%}
-{% load comments.comments %}
-{% load murphylog_template_tags%}
 {% extends "blog/base.djhtml" %}
+{% load i18n %}
+{% load murphymarkup%}
+{%comment%}
+{% load comments.comments %}
+{%endcomment%}
+{% load murphylog_template_tags%}
 
 {% block content %}
 
-{%comment%}
-break_weekday -> �滻Sunday,YYYY-MM-DDΪSunday<BR>YYYY-MM-DD
-{%endcomment%}
+ {% autoescape off %}
+
 <h3 class="date"> {{entry.post_date|date:"l,Y-m-d"|break_weekday}} </h3>
 
 {% include "blog/entry.djhtml" %}
 
-{% get_free_comment_count for murphylog.entry entry.id as comment_count %}
+ {% endautoescape %}
 
+{%comment%}
+{% get_free_comment_count for murphylog.entry entry.id as comment_count %}
 <h5>{%blocktrans%} Comments ({{comment_count}}) {%endblocktrans%} </h5>
+{%endcomment%}
 
 <a style="margin: 0px; padding: 0px; font-size: 1px;" id="c40"></a>
 
+{%comment%}
 {% ifnotequal comment_count 0 %}
 <div id="comments_div">
 <ol class="comments" id="comments">
@@ -34,8 +39,6 @@ break_weekday -> �滻Sunday,YYYY-MM-DDΪSunday<BR>YYYY-MM-DD
 </div>
 
 {% endifnotequal %}
-
-{%comment%}
 
 <br>
 

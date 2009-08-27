@@ -6,58 +6,10 @@
 
 <link rel="stylesheet" href="/media/tags/style/tags.css">
 <link rel="stylesheet" href="/media/blog/css/form.css">
-
+{{ form.media }}
 <form action="." method="post" id="post-form">
-  <table cellspacing="3" cellpadding="2" STYLE="table-layout:fixed" width="100%">
-    <tr>
-      <td class="td0">
-	<label for="id_title">Title</label>
-      </td>
-      <td class="td2">
-	{{form.title}}
-      </td>
-    </tr>
-    <tr>
-      <td class="td1">
-	<label for="id_subject">Subject</label>
-      </td>
-      <td class="td2">
-	{{form.subject}}
-      </td>
-    </tr>
-
-    <tr>
-      <td class="td1">
-	<label for="id_text">Text</label>
-      </td>
-      <td class="td2">
-	{{form.text}}
-      </td>
-    </tr>
-
-    <tr>
-      <td class="td1">
-	<label for="id_texttype">Text Type</label>
-      </td>
-      <td class="td2">
-	{{form.text_type}}
-      </td>
-    </tr>
-
-    <tr>
-      <td class="td1">
-	<label for="id_private">Private</label>
-      </td>
-      <td class="td2">
-	{{form.private}}
-      </td>
-    </tr>
-  </table>
-
-  <fieldset>
-    <legend>Tags</legend>
-    {{form.tags}}
-  </fieldset>
+  {{ form.as_p }}
+  
   <input name= "post" type="submit" value="Post" >
   <input name="cancel" type="submit" value="Cancel" onclick="history.back()">
   {% if update_post %}

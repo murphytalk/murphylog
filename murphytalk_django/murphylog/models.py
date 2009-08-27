@@ -33,19 +33,15 @@ class Entry(models.Model):
     )
 
 
-#    def __init__(self, *args, **kwargs):
-#        models.Model.__init__(self, *args, **kwargs)
-#        self.ChangeManipulator = Entry.EntryChangeManipulator
-
     #owner user
-    owner    = models.ForeignKey(django.contrib.auth.models.User)
+    owner    = models.ForeignKey(django.contrib.auth.models.User,editable=False)
     owner.default=get_me #取得默认值。此处返回在view中设置好的当前user
 
     #title
     title    = models.CharField('Title',max_length=200)
 
     #date posted(includes time)
-    post_date = models.DateTimeField('Date Posted')
+    post_date = models.DateTimeField('Date Posted',editable=False )
     post_date.default = lambda : datetime.datetime.now() #取得默认值
 
     #subject
@@ -58,7 +54,7 @@ class Entry(models.Model):
     text_type= models.CharField(max_length=2,choices=TEXT_TYPE_CHOICES)
 
     #time of last edit
-    last_edit= models.DateTimeField('Date of last edit')
+    last_edit= models.DateTimeField('Date of last edit',editable=False )
     last_edit.default = lambda : datetime.datetime.now() #取得默认值
 
     #private

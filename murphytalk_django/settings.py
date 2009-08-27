@@ -12,7 +12,6 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
 if LINUX:
     # 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
     DATABASE_ENGINE = 'mysql'
@@ -45,11 +44,11 @@ SITE_ID = 1
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = '/media/'
 
 # URL that handles the media served from MEDIA_ROOT.
 # Example: "http://media.lawrence.com"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.

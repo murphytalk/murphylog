@@ -15,6 +15,8 @@ from django.views.generic.create_update import delete_object
 
 from django.db.models import Q
 
+from django import forms
+
 # --- from free comments app ---
 #from django.contrib.comments.views.comments import post_free_comment as django_post_free_comment
 #from django.contrib.comments.models import FreeComment
@@ -26,6 +28,19 @@ from murphytalk_django.tagsfield.models      import Tag
 from murphytalk_django.murphylog.models import Entry
 
 import murphytalk_django.murphylog.models
+
+class EntryPostForm(forms.ModelForm):
+    #title
+    title   = forms.CharField(widget=forms.widgets.Textarea(attrs = {'cols': '80', 'rows': '1'}),max_length=200)
+    #subject
+    subject = forms.CharField(widget=forms.widgets.Textarea(attrs = {'cols': '80', 'rows': '15'}),max_length=200)
+    #text
+    text    = forms.CharField(widget=forms.widgets.Textarea(attrs = {'cols': '80', 'rows': '25'}),required=False)
+    #private
+    private = forms.BooleanField()
+
+    class Meta:
+        model = Entry
 
 
 # max posts displayed in one page
@@ -213,14 +228,15 @@ def update(request,eid):
         my_extra_context = get_basic_context()
         my_extra_context["update_post"]=True
         #passin count of comments,only display delete button for posts with 0 comment
-        my_extra_context["comment_count"]=FreeComment.objects.filter(object_id=int(eid)).count()
+        #my_extra_context["comment_count"]=FreeComment.objects.filter(object_id=int(eid)).count()
 
         result = update_object(request,Entry,object_id=eid,
+                               form_class = EntryPostForm,
                                login_required=True,
                                post_save_redirect="/blog/entryposted/%(id)s/",#goto posted detail page after posted
                                template_name="blog/update_entry.djhtml",
-                               extra_context=my_extra_context,
-                               follow={"post_date":False,"last_edit":False})
+                               extra_context=my_extra_context)
+#                               follow={"post_date":False,"last_edit":False})
 
 
     return result

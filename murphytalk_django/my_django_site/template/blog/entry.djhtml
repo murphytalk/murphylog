@@ -31,14 +31,16 @@ use custom tag if_show_private to determine wether to show content if entry is p
     {{ entry.title|highlight:highlight_keyword }}
   </h4>
 
+  {% autoescape off %}
+
   {% if_show_private entry user %}
      {% ifequal entry.text_type "rs" %}
-         {{ entry.subject|myRestructuredtext|highlight:highlight_keyword|safe}}
+         {{ entry.subject|myRestructuredtext|highlight:highlight_keyword}}
      {% else %}
          {% ifequal entry.text_type "st" %}
-              {{ entry.subject|structuredtext|highlight:highlight_keyword|safe}}
+              {{ entry.subject|structuredtext|highlight:highlight_keyword}}
          {% else %}
-              {{ entry.subject|BBCode|highlight:highlight_keyword|safe}}
+              {{ entry.subject|BBCode|highlight:highlight_keyword}}
          {% endifequal %}
      {% endifequal %}
 
@@ -62,6 +64,8 @@ use custom tag if_show_private to determine wether to show content if entry is p
          {% endifequal %}
       {% endif %}
   {% endif %}
+  
+  {% endautoescape %}
 
   <div class="{%trans "entry_tag" %}" >&bull;
   	  {% blocktrans with entry.owner.email as email and entry.owner.username as owner and entry.post_date|date:"H:i:s" as pdate and entry.last_edit|date:"Y-m-d H:i:s" as ledit%} Posted by <a href="mailto:{{email}}">{{owner}}</a> at {{pdate}} | last edited at {{ledit}}{% endblocktrans %}

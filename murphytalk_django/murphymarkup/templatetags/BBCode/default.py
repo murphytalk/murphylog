@@ -4,7 +4,7 @@
 #   (note: called trough frog.util package, not directly)
 #
 
-import sre, urllib, urlparse, cgi, mimetypes, os, math
+import re, urllib, urlparse, cgi, mimetypes, os, math
 from errors import MarkupSyntaxError
 
 __all__=["contentcleanup","content2html"]
@@ -18,8 +18,8 @@ def contentcleanup(text, environment={}):
         return None
 
 
-newlineRE = sre.compile(r'(?:\r?\n){2,}')
-tokenizeRE = sre.compile(r'(.*?)\[(/?[^[]*?(?:=([^[]*))?)\]', sre.DOTALL)
+newlineRE = re.compile(r'(?:\r?\n){2,}')
+tokenizeRE = re.compile(r'(.*?)\[(/?[^[]*?(?:=([^[]*))?)\]', re.DOTALL)
 
 SENTINEL = "/sentinel"
 
@@ -27,7 +27,7 @@ SENTINEL = "/sentinel"
 #
 # The default markup text parser.
 # env *must* contain:
-#  "urlprefix" (the url prefix for links) 
+#  "urlprefix" (the url prefix for links)
 #  "userid" (the current blog user id)
 #  "filepath" (the root path where statically linked files are stored)
 #  "smileys" (if smiley images should be used or not, must be the smiley color index or None)
@@ -106,7 +106,7 @@ class Parser:
                 # 'smart' link/embed
                 # determine filename and optional extra attrs (separated by | and ,)
                 filename=tag[1:].strip()
-                    
+
                 filename, attrs = self.parseCustomAttrs(filename)
                 self.environ["file"]=filename
                 mime=mimetypes.guess_type(filename)
@@ -158,7 +158,7 @@ class Parser:
                 break
             else:
                 self.processTag(tag, extra, matches)
-        self.closeParagraph()            
+        self.closeParagraph()
         if self.closetags!=self.opentags:
             raise MarkupSyntaxError("close tags don't match open tags")
 
@@ -194,7 +194,7 @@ class Parser:
     def openParagraph(self, checkFlag=True):
         if not checkFlag or not self.inparagraph:
             self.parsetree.append( "<p>")
-            self.inparagraph=True             
+            self.inparagraph=True
 
     def closeParagraph(self, clearFlag=True):
         if self.inparagraph:
@@ -208,7 +208,7 @@ class Parser:
     def processTag(self, tag, extra, matches):
         self.parsetree.append( '['+cgi.escape(tag,True)+']' )    # tags must not be processed
         # don't raise an error: raise MarkupSyntaxError("unknown or unmatched tag '%s'" % tag)
-    
+
     def processText(self, txt):
         # don't strip spaces because otherwise certain substrings will be joined together
         txt=self.processSmileys( cgi.escape(txt,True) )
@@ -245,7 +245,7 @@ class Parser:
             txt=txt.replace("%-|", '<img alt="%%-|" class="smiley" src="%(urlprefix)simg/smileys_%(smileycolorstr)s/rolleyes.gif" />' % self.environ)
             txt=txt.replace(":-O", '<img alt=":-O" class="smiley" src="%(urlprefix)simg/smileys_%(smileycolorstr)s/surprised.gif" />' % self.environ)
         return txt
-    
+
     def makeHTML(self, parsetree):
         return "".join(parsetree)
 
@@ -273,7 +273,7 @@ class Parser:
             return '<a href="%s" rel="nofollow">%s</a>' % (href, txt)
         else:
             return '<a href="%s">%s</a>' % (href,txt)
-       
+
     def parseIMG(self, tag, matches):
         tag, attrs = self.parseCustomAttrs(tag)
         location, closetag = matches.next().group(1,2)
@@ -361,7 +361,7 @@ def content2html(text,env={"urlprefix":"/media/blog/", "smileys":1},comment=Fals
     return parser.parse(matches)
 
 
-    
+
 def test():
     env={"urlprefix":"/frog/", "userid":"irmen", "filepath":"/home/irmen", "smileys":1 }
     #text="[b]b[/b]\n\n[i]i[/i]\n\n[tt]tt[/tt]"
@@ -380,8 +380,7 @@ def test():
 [/list]"""
     text= contentcleanup(text, env )
     print content2html(text,env)
-        
+
 
 if __name__=="__main__":
     test()
-
