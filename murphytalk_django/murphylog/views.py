@@ -16,11 +16,11 @@ from django.views.generic.create_update import delete_object
 from django.db.models import Q
 
 # --- from free comments app ---
-from django.contrib.comments.views.comments import post_free_comment as django_post_free_comment
-from django.contrib.comments.models import FreeComment
+#from django.contrib.comments.views.comments import post_free_comment as django_post_free_comment
+#from django.contrib.comments.models import FreeComment
 
 # --- from tags app ---
-from murphytalk_django.tags.models      import Tag
+from murphytalk_django.tagsfield.models      import Tag
 
 # --- from this app ---
 from murphytalk_django.murphylog.models import Entry
@@ -70,7 +70,7 @@ def get_basic_context(tag_id=None):
     tag_list=update_tag_list()
 
     #recent comments
-    comments=FreeComment.objects.all().order_by("-id")[:5]
+    comments=None#FreeComment.objects.all().order_by("-id")[:5]
 
     my_extra_context={"tag_list"         :tag_list,                   #tag cloud,
                       "total_posts_num"  :Entry.objects.all().count(),#number of total posts
@@ -201,13 +201,6 @@ def update(request,eid):
     #remember current user
     murphytalk_django.murphylog.models.me = request.user
 
-    #use custom change manipulator -> change size of controls,use exist values for some fields,etc
-    #@TODO:how can I put it on Entry's constructor?
-
-    default_manipulator=Entry.ChangeManipulator # seems admin is not happy with our customise manipulator
-                                                # have to restore the default one after we are done
-    Entry.ChangeManipulator = Entry.EntryChangeManipulator
-
     if request.POST.has_key("delete"):
         if FreeComment.objects.filter(object_id=int(eid)).count()==0:
             #delete object
@@ -229,7 +222,6 @@ def update(request,eid):
                                extra_context=my_extra_context,
                                follow={"post_date":False,"last_edit":False})
 
-    Entry.ChangeManipulator = default_manipulator
 
     return result
 
@@ -245,10 +237,6 @@ def new(request):
     #remember current user
     murphytalk_django.murphylog.models.me = request.user
 
-    default_manipulator=Entry.AddManipulator # seems admin is not happy with our customise manipulator
-                                             # have to restore the default one after we are done
-    Entry.AddManipulator = Entry.EntryAddManipulator
-
     my_extra_context = get_basic_context()
 
     result = create_object(request,Entry,
@@ -257,7 +245,6 @@ def new(request):
                            template_name="blog/update_entry.djhtml",
                            extra_context=my_extra_context)
 
-    Entry.AddManipulator = default_manipulator
 
     return result
 

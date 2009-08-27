@@ -1,6 +1,6 @@
-{% load murphymarkup.murphymarkup%}
-{% load comments.comments %}
 {% extends "blog/base.djhtml" %}
+{% load murphymarkup%}
+{% comment %}{% load comments.comments %}{% endcomment %}
 
 {% block content %}
 

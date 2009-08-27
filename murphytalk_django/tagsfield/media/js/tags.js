@@ -6,6 +6,10 @@ var DOWN_CODE=40;
 var MIN_WIDTH=150;
 var MAX_HEIGHT=200;
 
+var suppress_blur = false;
+var selected_index = -1;
+var lis;
+
 function createRequest(){
   try{
     return new XMLHttpRequest();
@@ -14,7 +18,6 @@ function createRequest(){
   }//try
 }//createRequest
 
-/*
 function addEvent(element,event,handler){
   if(element.addEventListener)
     element.addEventListener(event,handler,false);
@@ -23,7 +26,6 @@ function addEvent(element,event,handler){
   else
     throw 'Can\'t add event';
 }//addEvent
-*/
 
 function currentTarget(e){
   if(e.currentTarget)
@@ -131,11 +133,10 @@ function initAutoComplete(input,init_scope){
   ul.style.position='absolute';
   ul.style.display='none';
   ul.style.width=(input.offsetWidth<MIN_WIDTH?MIN_WIDTH:input.offsetWidth)-2+'px';
-  try{
+  if (ul.style.maxHeight != undefined)
     ul.style.maxHeight=MAX_HEIGHT+'px';
-  } catch(e) {
+  else
     ul.style.height=MAX_HEIGHT+'px';
-  }//try
   ul.style.whiteSpace='nowrap';
   ul.style.overflow='auto';
   try{
@@ -143,7 +144,9 @@ function initAutoComplete(input,init_scope){
   } catch(e){
     //do nothing
   }//try
+  ul.style.margin = '0';
   input.onkeyup=function(e){
+    mousemove_enabled = true;
     var keyCode=getKeyCode(e);
     if(keyCode==ENTER_CODE ||
        keyCode==ESC_CODE ||
@@ -159,28 +162,59 @@ function initAutoComplete(input,init_scope){
       hideList(ul,input);
     }//if
   }//keyup
-  input.onkeydown=function(e){
+  
+  // Separate function is for IE that doesn't handle UP and DOWN in keypress
+  var processCursorKeys = function(keyCode) {
+    showList(ul,input);
+    var li = moveListSelection(ul,keyCode==DOWN_CODE?'down':'up');
+    mousemove_enabled = false;
+    if (li.offsetTop < ul.scrollTop)
+      ul.scrollTop = li.offsetTop;
+    else if (li.offsetTop + li.offsetHeight > ul.scrollTop + ul.offsetHeight)
+      ul.scrollTop = li.offsetTop + li.offsetHeight - ul.offsetHeight;
+    // mouse moves are enabled at keyup
+  }//processCursorKeys
+  
+  input.onkeypress = function(e){
     var keyCode=getKeyCode(e);
     if(keyCode==ESC_CODE){
       hideList(ul,input);
     } else if(keyCode==DOWN_CODE || keyCode==UP_CODE){
-      showList(ul,input);
-      moveListSelection(ul,keyCode==DOWN_CODE?'down':'up');
+      processCursorKeys(keyCode);
     } else if(keyCode==ENTER_CODE){
       var li=selectedItem(ul);
       if(li){
         input.value=liValue(li);
-        hideList(ul,input);
-        if(e && e.preventDefault)
-          e.preventDefault();
-        return false;
       } else {
         if(hasClass(input,'strict'))
           input.value='';
       }//if
+      var open = ul.offsetHeight > 0;
+      hideList(ul,input);
+      if (open) {
+        if(e && e.preventDefault) {
+          e.preventDefault();
+          e.preventEnter = true;
+        }
+        return false;
+      }//
     }//if
-  }//keydown
+  }//keypress
+  input.onkeydown = function(e) {
+    if (e) 
+      return true; // serve only IE here
+    var keyCode=getKeyCode(e);
+    if (keyCode==DOWN_CODE || keyCode==UP_CODE){
+      processCursorKeys(keyCode);
+    }//if
+  }//onkeydown
   input.onblur=function(e){
+    if (suppress_blur) {
+      suppress_blur = false;
+      input.focus();
+      return;
+    }//if
+    suppress_blur = false;
     if(hasClass(input,'strict')){
       var li=selectedItem(ul);
       if(li)
@@ -196,6 +230,10 @@ function initAutoComplete(input,init_scope){
     else
       showList(ul,input);
   }//click
+  ul.onmousedown = function(e) {
+    if (window.event && window.event.srcElement == ul)
+      suppress_blur = true;
+  }
 }//initAutoComplete
 
 function normalizeTitle(title){
@@ -216,9 +254,9 @@ function liValue(li){
 }//liValue
 
 function showList(ul,input){
-  ul.style.display='block';
-  ul.style.left=elLeft(input)+'px';
-  ul.style.top=elTop(input)+input.offsetHeight+'px';
+  ul.style.display = 'block';
+  ul.style.left = elLeft(input) + 'px';
+  ul.style.top = elTop(input) + input.offsetHeight - 1 + 'px';
 }//showList
 
 function hideList(ul,input){
@@ -226,7 +264,7 @@ function hideList(ul,input){
 }//hideList
 
 function filterList(ul,value){
-  lis=ul.getElementsByTagName('LI');
+  lis = ul.getElementsByTagName('LI');
   for(var i=0;i<lis.length;i++){
     if(normalizeTitle(liValue(lis[i])).indexOf(normalizeTitle(value))==0)
       lis[i].style.display='';
@@ -255,31 +293,33 @@ function clearListSelection(ul){
 }//clearListSelection
 
 function moveListSelection(ul,direction){
-  var all_lis=ul.getElementsByTagName('LI');
-  var lis=[];
-  for(var i=0;i<all_lis.length;i++)
-    if(all_lis[i].offsetHeight)
-      lis[lis.length]=all_lis[i];
-  if(lis.length==0)
+  var old_index = removeSelection(lis);
+  var index = old_index;
+  var inc = (direction == 'down' ? 1 : -1);
+  do {
+    index += inc;
+    if(index < 0)
+      index = lis.length - 1;
+    if(index >= lis.length)
+      index = 0;
+  } while (index != old_index && !lis[index].offsetHeight);
+  if (index == old_index)
     return;
-  var index=removeSelection(lis);
-  index+=(direction=='down'?1:-1);
-  if(index<0)
-    index=lis.length-1;
-  if(index>=lis.length)
-    index=0;
-  addClass(lis[index],'selected');
+  setSelection(lis, index);
+  return lis[index];
 }//moveListSelection
 
+function setSelection(lis, index) {
+  addClass(lis[index], 'selected');
+  selected_index = index;
+}//setSelection
+
 function removeSelection(lis){
-  var index=-1;
-  for(var i=0;i<lis.length;i++)
-    if(hasClass(lis[i],'selected')){
-      index=i;
-      break;
-    }//if
-  if(index>=0)
-    removeClass(lis[index],'selected');
+  var index = selected_index;
+  if(selected_index >= 0) {
+    removeClass(lis[index], 'selected');
+    selected_index = -1;
+  }//if
   return index;
 }//removeSelection
 
@@ -307,16 +347,16 @@ function reloadList(ul,input,value){
       else
         var old_value='';
       ul.innerHTML=request.responseText;
-      lis=ul.getElementsByTagName('LI');
+      lis = ul.getElementsByTagName('LI');
       if(lis.length){
         var i=0;
         while(i<lis.length && liValue(lis[i])!=old_value)
           i++;
         if(i<lis.length)
-          addClass(lis[i],'selected');
+          setSelection(lis, i);
         else {
           if(hasClass(input,'strict'))
-            addClass(lis[0],'selected');
+            setSelection(lis, 0);
         }//if
       }//if
       initSuggestLis(ul,input);
@@ -328,19 +368,55 @@ function reloadList(ul,input,value){
   },500);
 }//reloadList
 
+var mousemove_enabled = true;
+
 function initSuggestLis(ul,input){
-  var lis=ul.getElementsByTagName('LI');
+  lis = ul.getElementsByTagName('LI');
   for(var i=0;i<lis.length;i++){
     lis[i].onmousedown=function(){
       input.value=liValue(this);
     }//onmousedown
-    lis[i].onmouseover=function(){
-      addClass(this,'selected');
-    }//onmouseover
-    lis[i].onmouseout=function(){
-      removeClass(this,'selected');
-    }//onmouseout
+    lis[i].onmouseover = function() {
+      var index = i;
+      return function(){
+        if (!mousemove_enabled)
+          return;
+        removeSelection(lis);
+        setSelection(lis, index);
+      }//onmouseover
+    }();
   }//for
 }//initSuggestLis
+
+function deleteTag(button){
+  var li=button.parentNode;
+  var ul=li.parentNode;
+  //Prevent deletion of last input for it is used as a template for addition
+  if(getElementsByClass('suggest_tag',li,'input').length && getElementsByClass('suggest_tag',ul,'input').length==1)
+    addTag(ul.parentNode);
+  ul.removeChild(li);
+}//deleteTag
+  
+function addTag(tag_widget){
+  var ul=tag_widget.getElementsByTagName('UL')[0];
+  var lis=ul.getElementsByTagName('LI');
+  var li=ul.appendChild(lis[lis.length-1].cloneNode(true));
+  var input=li.getElementsByTagName('INPUT')[0];
+  input.value='';
+  initAutoComplete(input,tag_widget);
+  input.focus();
+}//addTag
+
+function initTagWidget(tag_widget) {
+  addEvent(tag_widget,'keypress',function(e){
+    if(getKeyCode(e)==ENTER_CODE) {
+      addTag(tag_widget);
+      if(e && e.preventDefault)
+        e.preventDefault();
+      return false;
+    }//if
+  })//keypress
+  initAutoCompletes(tag_widget);
+}//initTagWidget
 
 addClass(document.body,'js');

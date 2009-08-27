@@ -1,4 +1,4 @@
-﻿{% comment %}
+{% comment %}
 
 render an entry
 
@@ -8,14 +8,22 @@ use custom tag if_show_private to determine wether to show content if entry is p
 {% endcomment %}
 
 {% load i18n %}
+
+{% comment %}
 {% load comments.comments %}
+{% endcomment %}
+
 {% load murphymarkup%}
 {% load murphylog_template_tags%}
 {% load markup%}
+
+{% comment %}
 {% get_free_comment_count for murphylog.entry entry.id as comment_count %}
+{% endcomment %}
 
 <div class="atomentry">
-  <h4 class="title">{% if_show_private entry user %}
+  <h4 class="title">
+      {% if_show_private entry user %}
          <a href="/blog/{{entry.id}}" title={%trans "Click to read"%}> <img class="permalink" alt="permalink" src="/media/blog/img/permalink.png" /></a>
 	 {% else %}
          <img class="permalink" alt="permalink" src="/media/blog/img/permalink.png" />
@@ -25,12 +33,12 @@ use custom tag if_show_private to determine wether to show content if entry is p
 
   {% if_show_private entry user %}
      {% ifequal entry.text_type "rs" %}
-         {{ entry.subject|myRestructuredtext|highlight:highlight_keyword}}
+         {{ entry.subject|myRestructuredtext|highlight:highlight_keyword|safe}}
      {% else %}
          {% ifequal entry.text_type "st" %}
-              {{ entry.subject|structuredtext|highlight:highlight_keyword}}
+              {{ entry.subject|structuredtext|highlight:highlight_keyword|safe}}
          {% else %}
-              {{ entry.subject|BBCode|highlight:highlight_keyword}}
+              {{ entry.subject|BBCode|highlight:highlight_keyword|safe}}
          {% endifequal %}
      {% endifequal %}
 

@@ -15,17 +15,17 @@ class IfShowPrivateNode(Node):
     def __repr__(self):
         return "<IfShowPrivateNode>"
 
-    def render(self, context):        
+    def render(self, context):
         try:
             private = resolve_variable("%s.private"%self.entry, context)
         except VariableDoesNotExist:
             private = None
-            
+
         try:
             ownerid = resolve_variable("%s.owner.id"%self.entry, context)
         except VariableDoesNotExist:
             ownerid = None
-            
+
         try:
             userid = resolve_variable("%s.id"%self.user, context)
         except VariableDoesNotExist:
@@ -73,5 +73,5 @@ if_show_private = register.tag(if_show_private)
 #替换Sunday,YYYY-MM-DD为Sunday<BR>YYYY-MM-DD
 def break_weekday(value):
     return value.replace(",","<BR>")
-    
+
 register.filter(break_weekday)

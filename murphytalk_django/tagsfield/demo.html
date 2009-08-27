@@ -63,38 +63,7 @@ works in a browser.
 
 <script type="text/javascript" src="js/tags.js"></script>
 <script type="text/javascript">
-  var ENTER_CODE=13;
-  var tag_widget=document.getElementById('tag_widget')
-
-  function deleteTag(button){
-    var li=button.parentNode;
-    var ul=li.parentNode;
-    //Prevent deletion of last input for it is used as a template for addition
-    if(getElementsByClass('suggest_tag',li,'input').length && getElementsByClass('suggest_tag',ul,'input').length==1)
-      addTag();
-    ul.removeChild(li);
-  }//deleteTag
-  
-  function addTag(){
-    var ul=tag_widget.getElementsByTagName('UL')[0];
-    var lis=ul.getElementsByTagName('LI');
-    var li=ul.appendChild(lis[lis.length-1].cloneNode(true));
-    var input=li.getElementsByTagName('INPUT')[0];
-    input.value='';
-    initAutoComplete(input,tag_widget);
-    input.focus();
-  }//addTag
-  
-  addEvent(tag_widget,'keydown',function(e){
-    if(getKeyCode(e)==ENTER_CODE) {
-      addTag();
-      if(e && e.preventDefault)
-        e.preventDefault();
-      return false;
-    }//if
-  })//keypress
-
-  addEvent(window,'load',function(){initAutoCompletes(tag_widget);});
+  addEvent(window, 'load', function() {initTagWidget(document.getElementById('tag_widget'));});
 </script>
 
   </fieldset>

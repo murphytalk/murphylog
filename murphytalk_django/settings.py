@@ -2,7 +2,7 @@
 
 # Django settings for murphytalk_django project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 LINUX = True
@@ -74,7 +74,7 @@ if LINUX:
     TEMPLATE_DIRS = (
         # Put strings here, like "/home/html/django_templates".
         # Always use forward slashes, even on Windows.
-        "/home/murphy/work/django/HOMEPAGE/murphytalk_django/my_django_site/template",
+        "/home/lu/work/murphyweb/murphytalk_django/my_django_site/template",
     )
 else:
     TEMPLATE_DIRS = (
@@ -90,7 +90,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'murphytalk_django.murphymarkup',
     'murphytalk_django.murphylog',
-    'murphytalk_django.tags',
+    'murphytalk_django.tagsfield',
 
     'django.contrib.comments', #因为murphylog重载了Comments的模板所以得把comments排在murphylog后面
                                #以保证被找到的不是comments模板
