@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
 # Django settings for murphytalk_django project.
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -20,6 +20,12 @@ if LINUX:
 else:
     DATABASE_ENGINE = 'sqlite3'
     DATABASE_NAME = 'C:/LM/Projects/extra/Django/murphytalk_django/my_django_site/murphytalk_django.db3'
+
+#try to load template dir from envrion var
+MY_TEMPLATE_DIR = os.environ.get('DJANGO_TEMPLATE_DIR')
+if MY_TEMPLATE_DIR is None:
+    MY_TEMPLATE_DIR="/home/murphy/work/django/HOMEPAGE/murphytalk_django/my_django_site/template"
+
 
 DATABASE_USER = 'root'             # Not used with sqlite3.
 DATABASE_PASSWORD = 'java2'         # Not used with sqlite3.
@@ -74,7 +80,7 @@ if LINUX:
     TEMPLATE_DIRS = (
         # Put strings here, like "/home/html/django_templates".
         # Always use forward slashes, even on Windows.
-        "/home/lu/work/murphyweb/murphytalk_django/my_django_site/template",
+        MY_TEMPLATE_DIR,
     )
 else:
     TEMPLATE_DIRS = (
