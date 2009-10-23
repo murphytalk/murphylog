@@ -8,13 +8,13 @@
 
 {% block content %}
 
- {% autoescape off %}
+{% autoescape off %}
 
 <h3 class="date"> {{entry.post_date|date:"l,Y-m-d"|break_weekday}} </h3>
 
 {% include "blog/entry.djhtml" %}
 
- {% endautoescape %}
+{% endautoescape %}
 
 {%comment%}
 {% get_free_comment_count for murphylog.entry entry.id as comment_count %}

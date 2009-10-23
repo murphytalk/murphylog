@@ -37,7 +37,7 @@ class EntryPostForm(forms.ModelForm):
     #text
     text    = forms.CharField(widget=forms.widgets.Textarea(attrs = {'cols': '80', 'rows': '25'}),required=False)
     #private
-    private = forms.BooleanField()
+    private = forms.BooleanField(required=False)
 
     class Meta:
         model = Entry

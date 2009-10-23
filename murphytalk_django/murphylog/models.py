@@ -59,7 +59,7 @@ class Entry(models.Model):
 
     #private
     #users other than the owner will not see this post
-    private  = models.BooleanField('Private')
+    private  = models.NullBooleanField('Private',null=True)
 
     #tags
     tags = fields.TagsField(Tag)

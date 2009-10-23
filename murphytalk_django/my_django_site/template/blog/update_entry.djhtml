@@ -4,12 +4,12 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="/media/tags/style/tags.css">
 <link rel="stylesheet" href="/media/blog/css/form.css">
 {{ form.media }}
+
 <form action="." method="post" id="post-form">
   {{ form.as_p }}
-  
+
   <input name= "post" type="submit" value="Post" >
   <input name="cancel" type="submit" value="Cancel" onclick="history.back()">
   {% if update_post %}
