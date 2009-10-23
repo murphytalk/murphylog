@@ -19,7 +19,7 @@ class TagsWidget(forms.Widget):
 
     def __init__(self, tag_choices, *args, **kwargs):
         super(TagsWidget, self).__init__(*args, **kwargs)
-        self.tag_choices = tag_choices
+        self.tags_dict = dict(tag_choices)
 
     def value_from_datadict(self, data, files, name):
         return [v for v in data.getlist(name) if v]
@@ -27,9 +27,8 @@ class TagsWidget(forms.Widget):
     def render(self, name, value, attrs=None):
         if value is None:
             value = []
-        tags_dict = dict(self.tag_choices)
-        value_tags = [tags_dict.get(v, v) for v in value]
-        tags = tags_dict.values()
+        value_tags = [self.tags_dict.get(v, v) for v in value]
+        tags = self.tags_dict.values()
         template = loader.get_template('tags/tag_widget.html')
         context = Context({
             'id': attrs['id'],
