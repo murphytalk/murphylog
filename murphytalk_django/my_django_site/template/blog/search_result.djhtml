@@ -1,6 +1,6 @@
 <h4>Searched for <em>{{keyword}}</em></h4>
 <ul>
   {% for entry in entries %}
-  <li><a href="/blog/{{entry.id}}/{{keyword}}">{{entry.title}}</a></li>
+  <li><a href="/blog/{{entry.id}}/{{keyword}}/">{{entry.title}}</a></li>
   {% endfor %}
 </ul>
