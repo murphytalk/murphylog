@@ -31,9 +31,9 @@
           {{p}}&nbsp;
       {% else %}
           {% if tag_id %}
-             <a href="/blog/tag/{{tag_id}}/page/{{p}}">{{p}}</a>&nbsp;
+             <a href="/blog/tag/{{tag_id}}/page/{{p}}/">{{p}}</a>&nbsp;
           {% else %}
-             <a href="/blog/page/{{p}}">{{p}}</a>&nbsp;
+             <a href="/blog/page/{{p}}/">{{p}}</a>&nbsp;
           {% endif %}
       {% endifequal %}
     {% endfor %}<p>

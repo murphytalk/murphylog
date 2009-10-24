@@ -16,7 +16,7 @@
 
 <div id="container">
   <div id="header" align=center>
-     <a href="/blog">
+     <a href="/blog/">
 	<img SRC="/media/blog/img/DaSong.gif">
      </a>
   </div>
