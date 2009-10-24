@@ -33,11 +33,11 @@ class EntryPostForm(forms.ModelForm):
     #title
     title   = forms.CharField(widget=forms.widgets.Textarea(attrs = {'cols': '80', 'rows': '1'}),max_length=200)
     #subject
-    subject = forms.CharField(widget=forms.widgets.Textarea(attrs = {'cols': '80', 'rows': '15'}),max_length=200)
+    subject = forms.CharField(widget=forms.widgets.Textarea(attrs = {'cols': '80', 'rows': '15'}))
     #text
     text    = forms.CharField(widget=forms.widgets.Textarea(attrs = {'cols': '80', 'rows': '25'}),required=False)
     #private
-    private = forms.BooleanField(required=False)
+    private = forms.BooleanField(widget=forms.widgets.CheckboxInput(),required=False)
 
     class Meta:
         model = Entry

@@ -15,7 +15,7 @@ MANAGERS = ADMINS
 if LINUX:
     # 'postgresql', 'mysql', 'sqlite3' or 'ado_mssql'.
     DATABASE_ENGINE = 'mysql'
-    DATABASE_NAME   = 'django_db'
+    DATABASE_NAME   = 'django_db_ver1'
 else:
     DATABASE_ENGINE = 'sqlite3'
     DATABASE_NAME = 'C:/LM/Projects/extra/Django/murphytalk_django/my_django_site/murphytalk_django.db3'
@@ -120,3 +120,10 @@ JS_URL    = "/media/tags/"
 RESTRUCTUREDTEXT_FILTER_SETTINGS={'file_insertion_enabled': 0,
                                   'raw_enabled': 0,
                                   '_disable_config': 1}
+
+#import logging
+#logging.basicConfig(level = logging.DEBUG,
+#                    format = '%(asctime)s %(levelname)s %(message)s',
+#                    filename = '/tmp/mydjango.log',
+#                    filemode = 'w')
+#logging.debug("settings loaded")

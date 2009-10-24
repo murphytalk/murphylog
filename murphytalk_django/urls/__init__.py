@@ -27,7 +27,7 @@ if settings.DEBUG:
     # ----------- media static files,for development only --------
     if settings.LINUX:
         urlpatterns += patterns('',
-                                (r'^media/(.*)$', 'django.views.static.serve', {'document_root': '/home/lu/work/murphyweb/murphytalk_django/my_django_site/media'}),
+                                (r'^media/(.*)$', 'django.views.static.serve', {'document_root': '/home/murphy/work/django/HOMEPAGE/murphytalk_django/my_django_site/media'}),
                                 (r'^blogimages/(.*)$', 'django.views.static.serve', {'document_root': '/home/media/BACKUP_DATA/HOMEPAGE/blogimages'}),
                                )
     else:
