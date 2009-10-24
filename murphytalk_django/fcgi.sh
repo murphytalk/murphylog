@@ -6,12 +6,12 @@ PIDFILE="$PROJDIR/mysite.pid"
 SOCKET="$PROJDIR/mysite.sock"
 MAXSPARE=1
 
-#start 
+#start
 django_start(){
     exec /usr/bin/env - \
 	PYTHONPATH="../python:.." \
-        $PROJDIR/manage.py runfcgi socket=$SOCKET pidfile=$PIDFILE maxspare=$MAXSPARE    
-	#./manage.py runfcgi host=127.0.0.1 port=3033 pidfile=$PIDFILE maxspare=$MAXSPARE
+        $PROJDIR/manage.py runfcgi host=127.0.0.1 port=3033 pidfile=$PIDFILE maxspare=$MAXSPARE
+        #$PROJDIR/manage.py runfcgi socket=$SOCKET pidfile=$PIDFILE maxspare=$MAXSPARE outlog="$PROJDIR/fcgi.out" errlog="$PROJDIR/fcgi.err"
 }
 
 #stop
@@ -40,4 +40,3 @@ case "$1" in
 *)
   echo "usage $0 start|stop|restart"
 esac
-
