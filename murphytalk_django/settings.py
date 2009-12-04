@@ -2,7 +2,7 @@
 # Django settings for murphytalk_django project.
 import os
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 LINUX = True
@@ -54,6 +54,8 @@ MEDIA_URL = '/media/'
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/admin/'
+
+URL_FILEBROWSER_MEDIA = '/media/filebrowser/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '7&acgu_(yr*_wh&sfy0g)f-!2j+m0rxhr285m-c5hdkz=@t%w5'

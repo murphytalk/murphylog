@@ -6,6 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # ----------- django apps ----------------------------------
+     (r'^admin/filebrowser/', include('filebrowser.urls')),
     #admin:
      (r'^admin/(.*)', admin.site.root),
 

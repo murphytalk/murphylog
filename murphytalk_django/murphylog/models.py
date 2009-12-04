@@ -48,10 +48,11 @@ class Entry(models.Model):
     subject  = models.TextField('Subject')
 
     #text
-    text     = models.TextField('Text',null=True)
+    text     = models.TextField('Text',blank=True)
 
     #text type
     text_type= models.CharField(max_length=2,choices=TEXT_TYPE_CHOICES)
+    text_type.default = u'rs'
 
     #time of last edit
     last_edit= models.DateTimeField('Date of last edit',editable=False )
@@ -59,7 +60,8 @@ class Entry(models.Model):
 
     #private
     #users other than the owner will not see this post
-    private  = models.NullBooleanField('Private',null=True)
+    private  = models.BooleanField('Private')
+    private.default = False
 
     #tags
     tags = fields.TagsField(Tag)

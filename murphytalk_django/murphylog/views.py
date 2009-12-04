@@ -37,7 +37,7 @@ class EntryPostForm(forms.ModelForm):
     #text
     text    = forms.CharField(widget=forms.widgets.Textarea(attrs = {'cols': '80', 'rows': '25'}),required=False)
     #private
-    private = forms.BooleanField(widget=forms.widgets.CheckboxInput(),required=False)
+    #private = forms.BooleanField(widget=forms.widgets.CheckboxInput(),required=False)
 
     class Meta:
         model = Entry
@@ -217,7 +217,7 @@ def update(request,eid):
     murphytalk_django.murphylog.models.me = request.user
 
     if request.POST.has_key("delete"):
-        if FreeComment.objects.filter(object_id=int(eid)).count()==0:
+        if True: #@todo:FreeComment.objects.filter(object_id=int(eid)).count()==0:
             #delete object
             result = delete_object(request,Entry,object_id=eid,
                                    post_delete_redirect="/blog/")
@@ -227,6 +227,7 @@ def update(request,eid):
     else:
         my_extra_context = get_basic_context()
         my_extra_context["update_post"]=True
+        my_extra_context["comment_count"]=0 #@todo
         #passin count of comments,only display delete button for posts with 0 comment
         #my_extra_context["comment_count"]=FreeComment.objects.filter(object_id=int(eid)).count()
 
