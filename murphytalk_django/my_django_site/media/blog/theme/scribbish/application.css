@@ -13,7 +13,7 @@
 
 body {
 	background: url(img/background.gif) repeat-x left top;
-	font-family: "Trebuchet MS", Verdana, helvetica, sans-serif;
+	font-family:"Trebuchet MS", Verdana, helvetica,"Hiragino Sans GB",sans-serif;
 	font-size: small;
 }
 
