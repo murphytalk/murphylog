@@ -14,11 +14,9 @@
 <body>
 
 <div id="container">
-  <div id="header" align=center>
-     <a href="/">
-	<img src="/static/img/DaSong.gif" alt="山河奄有中華地 日月重開大漢天">
-     </a>
-  </div>
+  <h1 id="header">
+     grep ~/brain -v nonesense
+  </h1>
 
   <div id="page">
     <div id="heading">
@@ -46,11 +44,13 @@
 <!-- the page sidebar -->
     <div id="sidebar">
       Firefox sucks less than the others <img src="/static/img/smileys_yellow/cheesygrin.gif"/>
+      <span id = "powered-by">
       <div class="powered-by">
 	<a href="http://www.spreadfirefox.com/">
 	  <img border="0" alt="Spread Firefox" title="Spread Firefox"
 	       src="/static/img/firefox/firefox.gif"/></a>
       </div>
+      </span>
 
       <h3 class="sidbar-title">{% trans "Tags"%}</h3>
       <div class="tag-cloud">
@@ -80,6 +80,7 @@
 
 
 <!--Powered by -->
+      <span id = "powered-by">
       <p>
         <a href="http://www.python.org/">
 	  <img src="/static/img/powered-by/PythonPowered.gif" ALT="This site is Python powered." border="0" title="{% trans "Powered by Python"%}"></a>
@@ -94,8 +95,8 @@
       <p>
 	<a href="http://www.gnu.org/software/emacs/">
 	  <img src="/static/img/powered-by/emacs-powered-blue.jpg" ALT="This site is Emacs powered."  border="0" title="{% trans "Edit in Emacs"%}"> </a>
-        </p>
-
+      </p>
+      </span>
 
       {% if user.is_anonymous %}
         <script type="text/javascript" src="/static/js/form.js"></script>

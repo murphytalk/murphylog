@@ -1,9 +1,19 @@
 /*--------------------------------------------------------------
  Header
  --------------------------------------------------------------*/
-
-#header {
-	background: url(img/header_shadow.gif) repeat-x left bottom;
+h1#header {
+    background:none repeat scroll 0 0 #E8E8E8;
+    /*border:medium solid #444444;border-width:thin;*/
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    font-family:consolas;monospace;
+    font-size:200%;
+    letter-spacing:0.1em;
+    margin:0;
+    padding:0.25em;
+    text-decoration:none;
 }
 
 #header a:link,
