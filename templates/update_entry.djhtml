@@ -1,0 +1,47 @@
+{% extends "base.djhtml" %}
+
+{% block customize-css %}
+<link rel="stylesheet" type="text/css" href="/static/theme/scribbish/form.css" />
+{% endblock %}
+
+{% block content %}
+
+<form action="/post-entry" method="post" class="cssform" id="update-entry-form">
+  <p>
+  <label>Title</label>
+  <input type="text" id="title" value=""/>
+  </p>
+
+  <p>
+  <label>Subject</label>
+  <input type="text" id="subject" value=""/>
+  </p>
+
+  <p>
+  <label>Text</label>
+  <textarea id="text" rows="10" cols="80"></textarea>
+  </p>
+
+  <p>
+  <label>Text type</label>
+  <input type="radio" name="texttype"/> reStructureText <input type="radio" name="texttype"/> StructureText <input type="radio" name="texttype"/> BBCode
+  </p>
+
+  <p>
+  <label>Private</label>
+  <input type="checkbox" name="private"/>
+  </p>
+
+  <div style="margin-left: 150px;">
+   <input name= "post" type="submit" value="Post" >
+   <input name="cancel" type="submit" value="Cancel" onclick="history.back()">
+   {% if update_post %}
+    {% ifequal comment_count 0 %}
+        <input name="delete" type="submit" value="Delete" style="color:red">
+    {% endifequal%}
+   {% endif%}
+  </div>
+</form>
+
+
+{% endblock %}

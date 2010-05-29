@@ -1,0 +1,80 @@
+{% comment %}
+
+render an entry
+
+use one custom filters to render structed text/bbcode,which are defined in murphymarkup app
+use custom tag if_show_private to determine wether to show content if entry is private
+
+{% endcomment %}
+
+{% load murphymarkup%}
+{% load murphylog_template_tags%}
+{% load markup%}
+
+<div class="atomentry">
+  <h4 class="title">
+      {% if_show_private entry user %}
+         <a href="/{{entry.id}}/" title={%trans "Click to read"%}> <img class="permalink" alt="permalink" src="/static/img/permalink.png" /></a>
+	 {% else %}
+         <img class="permalink" alt="permalink" src="/static/img/permalink.png" />
+      {% endif_show_private %}
+    {{ entry.title|highlight:highlight_keyword }}
+  </h4>
+
+  {% autoescape off %}
+
+  {% if_show_private entry user %}
+     {% ifequal entry.text_type "rs" %}
+         {{ entry.subject|myRestructuredtext|highlight:highlight_keyword}}
+     {% else %}
+         {% ifequal entry.text_type "st" %}
+              {{ entry.subject|structuredtext|highlight:highlight_keyword}}
+         {% else %}
+              {{ entry.subject|BBCode|highlight:highlight_keyword}}
+         {% endifequal %}
+     {% endifequal %}
+
+     {% if not show_detail and entry.text %}
+         &nbsp; &nbsp; &bull;&nbsp;<a href="/{{entry.id}}/">{%trans "Read more"%} &raquo;</a><p>
+     {% endif %}
+  {% endif_show_private %}
+
+
+  {% if show_detail %}
+      {% if entry.text %}
+	  ―
+         {% ifequal entry.text_type "rs" %}
+               {{ entry.text|myRestructuredtext|highlight:highlight_keyword}}
+         {% else %}
+               {% ifequal entry.text_type "st" %}
+                   {{ entry.text|structuredtext|highlight:highlight_keyword }}
+               {% else %}
+                   {{ entry.text|BBCode|highlight:highlight_keyword}}
+               {% endifequal %}
+         {% endifequal %}
+      {% endif %}
+  {% endif %}
+
+  {% endautoescape %}
+
+  <div class="{%trans "entry_tag" %}" >&bull;
+  	  {% blocktrans with entry.owner.email as email and entry.owner.username as owner and entry.post_date|date:"H:i:s" as pdate and entry.last_edit|date:"Y-m-d H:i:s" as ledit%} Posted by <a href="mailto:{{email}}">{{owner}}</a> at {{pdate}} | last edited at {{ledit}}{% endblocktrans %}
+
+      {% ifequal entry.owner.id user.id %}
+          | <a href="/edit/{{entry.id}}/">{%trans "Edit this article"%} </a>
+      {% endifequal %}
+
+  	        | <a href="/{{entry.id}}/">{%trans "Comments"%} x {{comment_count}}</a>
+
+      {% if entry.private %}
+          | {%trans "This is a <font color=red>private</font> post"%}
+      {% endif %}<br>
+  	  &bull; {%trans "Tags :"%}
+  	  {% for pt in entry.getTags %}
+        <span title="{{pt.2}}">
+           <a href="/tag/{{pt.0}}/">{{pt.1}}</a>&#32;
+  	      </span>
+  	  {% endfor %}
+
+  </div>
+</div>
