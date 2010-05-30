@@ -5,6 +5,7 @@ its code is at http://github.com/bmc/picoblog
 """
 
 from google.appengine.ext import db
+import logging
 
 ENTRIES_PER_PAGE = 10
 
@@ -21,12 +22,13 @@ class Entry(db.Model):
 
     provide some class function to manipulate quries and results
     """
-    title   = db.StringProperty(required=True)
+    #title   = db.StringProperty(required=True,default="x")
+    title   = db.StringProperty(required=False)
     subject = db.TextProperty()
     text    = db.TextProperty()
     owner   = db.UserProperty(auto_current_user_add=True)
     private = db.BooleanProperty(required=True, default=False)
-    format  = db.StringProperty(required=True, choices=set(["rs", "st", "bb"]),indexed=False)
+    format  = db.StringProperty(required=True, default="rs",choices=set(["rs", "st", "bb"]),indexed=False)
 
     post_time = db.DateTimeProperty(auto_now_add=True)
     last_edit = db.DateTimeProperty(auto_now_add=True)
@@ -57,7 +59,7 @@ class Entry(db.Model):
         return (entries[:ENTRIES_PER_PAGE],new_bookmark)
 
     @classmethod
-    def get(cls, id):
-        q = db.Query(BlogEntry)
-        q.filter('id = ', id)
+    def get(cls,key):
+        q = db.Query(Entry)
+        q.filter('__key__ = ', db.Key(key))
         return q.get()

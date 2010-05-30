@@ -52,6 +52,7 @@ class MyRequestHandler(webapp.RequestHandler):
                 Can be empty.
         """
         template_path = self.get_template(template_name)
+        logging.info("load template:%s"%template_path)
         self.response.out.write(template.render(template_path, template_vars))
 
 
@@ -61,6 +62,7 @@ class HomePage(MyRequestHandler):
     """
     def get(self):
         entries,bookmark = Entry.get_next_page(None)
+        logging.info("num of entries = %d,bookmark=%s"%(len(entries),bookmark))
         user             = users.get_current_user()
         if user:
             user_url = users.create_logout_url(self.request.uri)
@@ -70,6 +72,7 @@ class HomePage(MyRequestHandler):
             'entries'   : entries,
             'user_url'  : user_url,
             'user'      : user,
+            'highlight_keyword' : None,
             'is_view'   : True,
         }
 
@@ -102,28 +105,52 @@ class UpdateEntry(MyRequestHandler):
     edit post page
     """
     @logged_in_as_owner
-    def get(self,id):
-        logging.info("UpdateEntry::get,id=%s"%id)
+    def get(self,key = None):
+        logging.info("UpdateEntry::get,key=%s"%key)
+        if key is None:
+            entry  = None
+            format = 'rs'
+        else:
+            entry  = Entry.get(key)
+            format = entry.format
+
         template_values = {
-            'id'       : id,
+            'key'      : key,
             'user'     : users.get_current_user(),
+            'entry'    : entry,
+            'format'   : format,
             'user_url' : users.create_logout_url(self.request.uri),
-            'is_update': True,
         }
         self.render_template('update_entry.djhtml',template_values)
-
-class NewEntry(UpdateEntry):
-    """
-    new post page
-    @todo : no smarter way? like what django does: capture parameters from url?
-    """
-    def get(self):
-        return super(NewEntry, self).get(None)
 
 class PostEntry(MyRequestHandler):
     """
     post entry
     """
-    @logged_in_as_owner
     def get(self):
-        pass
+        self.redirect('/')
+
+    @logged_in_as_owner
+    def post(self,key = None):
+        def get_contents(entry,request):
+            entry.title   = request.get('title')
+            logging.info("title=%s"%entry.title)
+            entry.subject = request.get('subject')
+            entry.text    = request.get('text')
+            private       = False #request.get('is_private')
+            entry.private = private and len(private)>0
+            entry.format  = request.get('texttype')
+
+        logging.info("post,key=%s"%key)
+        if key:
+            #update
+            entry = Entry.get(key)
+        else:
+            #new
+            entry = Entry()
+
+        logging.info("TITLE = <%s>"%self.request.get('title'))
+        get_contents(entry,self.request)
+        entry.put()
+
+        self.redirect('/')

@@ -15,7 +15,7 @@
 
 <div id="container">
   <h1 id="header">
-     grep ~/brain -v nonesense
+     <a href="/">grep ~/brain -v nonesense</a>
   </h1>
 
   <div id="page">
@@ -45,10 +45,11 @@
     <div id="sidebar">
       Firefox sucks less than the others <img src="/static/img/smileys_yellow/cheesygrin.gif"/>
       <span id = "powered-by">
-      <div class="powered-by">
-	<a href="http://www.spreadfirefox.com/">
-	  <img border="0" alt="Spread Firefox" title="Spread Firefox"
-	       src="/static/img/firefox/firefox.gif"/></a>
+       <div class="powered-by">
+       	<a href="http://www.spreadfirefox.com/">
+        	  <img border="0" alt="Spread Firefox" title="Spread Firefox"
+	                 src="/static/img/firefox/firefox.gif"/>
+        </a>
       </div>
       </span>
 

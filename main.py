@@ -28,10 +28,11 @@ from blog import *
 template.register_template_library('template_tag_filter.tag_filter')
 
 application = webapp.WSGIApplication(
-  [('/'               , HomePage),
-   ('/new/'           , NewEntry),
-   ('/edit/([0-9]*)/' , UpdateEntry),
-   ('/post/'          , PostEntry),
+  [('/'                      , HomePage),
+   ('/new/'                  , UpdateEntry),
+   ('/edit/([0-9]*)/'        , UpdateEntry),
+   ('/post/([0-9a-zA-Z\-]+)/', PostEntry),
+   ('/post-new/'             , PostEntry),
 #   ('/*'              , NotFoundPageHandler)
   ],
   debug=True)

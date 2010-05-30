@@ -7,6 +7,7 @@ from BBCode.default import content2html
 from utils import processSmileys
 import enhanced_docutils #patch the docutils package
 
+import defs
 from google.appengine.ext import webapp
 register = webapp.template.create_template_register()
 
@@ -95,7 +96,7 @@ def myRestructuredtext(value):
             raise template.TemplateSyntaxError, "Error in {% restructuredtext %} filter: The Python docutils library isn't installed."
         return value
     else:
-        docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
+        docutils_settings = getattr(defs, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
         parts = publish_parts(source=value, writer_name="myhtml", settings_overrides=docutils_settings)
         return processSmileys(parts["fragment"])
 

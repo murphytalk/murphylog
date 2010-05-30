@@ -6,30 +6,32 @@
 
 {% block content %}
 
-<form action="/post-entry" method="post" class="cssform" id="update-entry-form">
+<form method="post" action="{% if entry %}/post/{{key}}/{% else %}/post-new/{% endif %}" method="post" class="cssform" id="update-entry-form">
   <p>
   <label>Title</label>
-  <input type="text" id="title" value=""/>
+  <input type="text" name="title" value="{% if entry.title %}{{entry.title|escape}}{% endif %}"/>
   </p>
 
   <p>
   <label>Subject</label>
-  <input type="text" id="subject" value=""/>
+  <input type="text" name="subject" value="{% if entry.subject %}{{entry.subject|escape}}{% endif %}"/>
   </p>
 
   <p>
   <label>Text</label>
-  <textarea id="text" rows="10" cols="80"></textarea>
+  <textarea name="text" rows="10" cols="80">{% if entry.text %}{{entry.text|escape}}{% endif %}</textarea>
   </p>
 
   <p>
   <label>Text type</label>
-  <input type="radio" name="texttype"/> reStructureText <input type="radio" name="texttype"/> StructureText <input type="radio" name="texttype"/> BBCode
+   <input type="radio" name="texttype" value="rs" {% ifequal format "rs" %} checked {% endifequal %}/> reStructureText
+   <input type="radio" name="texttype" value="st" {% ifequal format "st" %} checked {% endifequal %}/> StructureText
+   <input type="radio" name="texttype" value="bb" {% ifequal format "bb" %} checked {% endifequal %}/> BBCode
   </p>
 
   <p>
   <label>Private</label>
-  <input type="checkbox" name="private"/>
+  <input type="checkbox" name="private" value="is_private" {% if entry.privte %} checked {% endif %}/>
   </p>
 
   <div style="margin-left: 150px;">
