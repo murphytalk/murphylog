@@ -63,7 +63,7 @@ class HomePage(MyRequestHandler):
     def get(self):
         entries,bookmark = Entry.get_next_page(None)
         logging.info("num of entries = %d,bookmark=%s"%(len(entries),bookmark))
-        user             = users.get_current_user()
+        user  = users.get_current_user()
         if user:
             user_url = users.create_logout_url(self.request.uri)
         else:
@@ -134,14 +134,12 @@ class PostEntry(MyRequestHandler):
     def post(self,key = None):
         def get_contents(entry,request):
             entry.title   = request.get('title')
-            logging.info("title=%s"%entry.title)
             entry.subject = request.get('subject')
             entry.text    = request.get('text')
             private       = False #request.get('is_private')
             entry.private = private and len(private)>0
             entry.format  = request.get('texttype')
 
-        logging.info("post,key=%s"%key)
         if key:
             #update
             entry = Entry.get(key)
@@ -149,8 +147,28 @@ class PostEntry(MyRequestHandler):
             #new
             entry = Entry()
 
-        logging.info("TITLE = <%s>"%self.request.get('title'))
         get_contents(entry,self.request)
         entry.put()
 
         self.redirect('/')
+
+class ShowEntry(MyRequestHandler):
+    def get(self,key=None):
+        if key is None:
+            self.redirect("/")
+        else:
+            user  = users.get_current_user()
+            if user:
+                user_url = users.create_logout_url(self.request.uri)
+            else:
+                user_url = users.create_login_url(self.request.uri)
+            entry = Entry.get(key)
+            template_values = {
+                'entry'     : entry,
+                'user_url'  : user_url,
+                'user'      : user,
+                'highlight_keyword' : None,
+                'is_view'    : True,
+                'show_detail': True
+                }
+        self.render_template('detail.djhtml',template_values)

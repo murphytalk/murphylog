@@ -1,6 +1,6 @@
 {% load i18n %}
-<!DOCTYPE html PUBLIC "-/W3C/DTD XHTML 1.0 Strict/EN" "http:/www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html  lang="zh-TW" dir="ltr" xml:lang="zh-TW" xmlns="http:/www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
   <link rel="shortcut icon" href="/static/img/favicon.ico" />
@@ -15,7 +15,7 @@
 
 <div id="container">
   <h1 id="header">
-     <a href="/">grep ~/brain -v nonesense</a>
+     <a href="/">grep -v nonesense ~/brain</a>
   </h1>
 
   <div id="page">
@@ -84,7 +84,7 @@
       <span id = "powered-by">
       <p>
         <a href="http://www.python.org/">
-	  <img src="/static/img/powered-by/PythonPowered.gif" ALT="This site is Python powered." border="0" title="{% trans "Powered by Python"%}"></a>
+	  <img src="/static/img/powered-by/PythonPowered.gif" alt="This site is Python powered." border="0" title="{% trans "Powered by Python"%}"></a>
       </p>
 
       <p>
@@ -95,7 +95,7 @@
 
       <p>
 	<a href="http://www.gnu.org/software/emacs/">
-	  <img src="/static/img/powered-by/emacs-powered-blue.jpg" ALT="This site is Emacs powered."  border="0" title="{% trans "Edit in Emacs"%}"> </a>
+	  <img src="/static/img/powered-by/emacs-powered-blue.jpg" alt="This site is Emacs powered."  border="0" title="{% trans "Edit in Emacs"%}"> </a>
       </p>
       </span>
 

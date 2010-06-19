@@ -14,7 +14,7 @@
 
   <p>
   <label>Subject</label>
-  <input type="text" name="subject" value="{% if entry.subject %}{{entry.subject|escape}}{% endif %}"/>
+  <textarea name="subject" rows="10" cols="80">{% if entry.subject %}{{entry.subject|escape}}{% endif %}</textarea>
   </p>
 
   <p>

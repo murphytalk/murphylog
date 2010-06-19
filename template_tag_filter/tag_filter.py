@@ -80,9 +80,9 @@ if_show_private = register.tag(if_show_private)
 #----------------------------------------------------------------------------------
 # custom filter
 
-#替换Sunday,YYYY-MM-DD为Sunday<BR>YYYY-MM-DD
+#替换Sunday,YYYY-MM-DD为Sunday<br/>YYYY-MM-DD
 def break_weekday(value):
-    return value.replace(",","<BR>")
+    return value.replace(",","<br/>")
 
 register.filter(break_weekday)
 

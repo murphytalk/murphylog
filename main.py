@@ -33,7 +33,8 @@ application = webapp.WSGIApplication(
    ('/edit/([0-9]*)/'        , UpdateEntry),
    ('/post/([0-9a-zA-Z\-]+)/', PostEntry),
    ('/post-new/'             , PostEntry),
-#   ('/*'              , NotFoundPageHandler)
+   ('/blog/([0-9a-zA-Z\-]+)/', ShowEntry),
+ #   ('/*'              , NotFoundPageHandler)
   ],
   debug=True)
 
