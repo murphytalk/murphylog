@@ -38,7 +38,7 @@ use custom tag if_show_private to determine wether to show content if entry is p
 
   {% if show_detail %}
       {% if entry.text %}
-  <hr>
+	  ―
          {% ifequal entry.format "rs" %}
                {{ entry.text|myRestructuredtext|highlight:highlight_keyword}}
          {% else %}

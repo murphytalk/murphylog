@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# coding=utf-8
 import os.path
 
 from google.appengine.ext        import webapp
@@ -10,6 +11,9 @@ from defs   import *
 
 import functools
 import logging
+
+from django.conf import settings
+
 
 #class NotFoundPageHandler(webapp.RequestHandler):
 #    def get(self):
@@ -51,9 +55,10 @@ class MyRequestHandler(webapp.RequestHandler):
                 Dictionary of variables to make available to the template.
                 Can be empty.
         """
+        logging.info("settings.DEFAULT_CHARSET=",settings.DEFAULT_CHARSET)
         template_path = self.get_template(template_name)
         logging.info("load template:%s"%template_path)
-        self.response.out.write(template.render(template_path, template_vars))
+        self.response.out.write(template.render(template_path, template_vars).decode('utf-8'))
 
 
 class HomePage(MyRequestHandler):
