@@ -47,7 +47,6 @@ class Entry(db.Model):
 
     provide some class function to manipulate quries and results
     """
-    #title   = db.StringProperty(required=True,default="x")
     title   = db.StringProperty(required=False)
     subject = db.TextProperty()
     text    = db.TextProperty()

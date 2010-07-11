@@ -29,12 +29,12 @@ class IfShowPrivateNode(Node):
             private = None
 
         try:
-            ownerid = resolve_variable("%s.owner.id"%self.entry, context)
+            ownerid = resolve_variable("%s.owner.user_id"%self.entry, context)
         except VariableDoesNotExist:
             ownerid = None
 
         try:
-            userid = resolve_variable("%s.id"%self.user, context)
+            userid = resolve_variable("%s.user_id"%self.user, context)
         except VariableDoesNotExist:
             userid = None #for anonymous user userid would be None
 

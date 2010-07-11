@@ -31,7 +31,7 @@
 
   <p>
   <label>Private</label>
-  <input type="checkbox" name="private" value="is_private" {% if entry.privte %} checked {% endif %}/>
+  <input type="checkbox" name="private" value="private" {% if entry.private %} checked {% endif %}/>
   </p>
 
   <div style="margin-left: 150px;">

@@ -147,9 +147,11 @@ class PostEntry(MyRequestHandler):
             entry.title   = request.get('title')
             entry.subject = request.get('subject')
             entry.text    = request.get('text')
-            private       = False #request.get('is_private')
-            entry.private = private and len(private)>0
             entry.format  = request.get('texttype')
+
+            #logging.info("private="+request.get('private'))
+            private = request.get('private')
+            entry.private = private is not None
 
         if key:
             #update
