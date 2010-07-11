@@ -30,13 +30,15 @@ from blog import *
 template.register_template_library('template_tag_filter.tag_filter')
 
 application = webapp.WSGIApplication(
-  [('/'                      , HomePage),
+  [('/'                      , Index),
+   ('/prev/([0-9a-zA-Z\-]+)/', PrevPage),
+   ('/next/([0-9a-zA-Z\-]+)/', Index),
    ('/new/'                  , UpdateEntry),
-   ('/edit/([0-9]*)/'        , UpdateEntry),
+   ('/edit/([0-9a-zA-Z\-]+)/', UpdateEntry),
    ('/post/([0-9a-zA-Z\-]+)/', PostEntry),
    ('/post-new/'             , PostEntry),
    ('/blog/([0-9a-zA-Z\-]+)/', ShowEntry),
- #   ('/*'              , NotFoundPageHandler)
+#   ('/*'              , NotFoundPageHandler)
   ],
   debug=True)
 

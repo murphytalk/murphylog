@@ -55,34 +55,44 @@ class MyRequestHandler(webapp.RequestHandler):
                 Dictionary of variables to make available to the template.
                 Can be empty.
         """
-        logging.info("settings.DEFAULT_CHARSET=",settings.DEFAULT_CHARSET)
         template_path = self.get_template(template_name)
-        logging.info("load template:%s"%template_path)
-        self.response.out.write(template.render(template_path, template_vars).decode('utf-8'))
+        self.response.out.write(template.render(template_path, template_vars))
 
 
-class HomePage(MyRequestHandler):
+class Index(MyRequestHandler):
     """
     the root page
     """
-    def get(self):
-        entries,bookmark = Entry.get_next_page(None)
-        logging.info("num of entries = %d,bookmark=%s"%(len(entries),bookmark))
+    def do_get(self,prev_bkmk,get_old,get_page):
+        entries,next_bkmk = get_page(prev_bkmk)
         user  = users.get_current_user()
         if user:
             user_url = users.create_logout_url(self.request.uri)
         else:
             user_url = users.create_login_url(self.request.uri)
+
         template_values = {
-            'entries'   : entries,
-            'user_url'  : user_url,
-            'user'      : user,
-            'highlight_keyword' : None,
-            'is_view'   : True,
+            'entries'       : entries,
+            'user_url'      : user_url,
+            'user'          : user,
+            'is_view'       : True,
         }
+
+        if get_old:
+            template_values['new_page_bkmk'] = prev_bkmk
+            template_values['old_page_bkmk'] = next_bkmk
+        else:
+            template_values['new_page_bkmk'] = next_bkmk
+            template_values['old_page_bkmk'] = prev_bkmk
 
         self.render_template('index.djhtml',template_values)
 
+    def get(self,new_page_bookmark=None):
+        self.do_get(new_page_bookmark,True,Entry.get_old_page)
+
+class PrevPage(Index):
+    def get(self,bookmark=None):
+        self.do_get(bookmark,False,Entry.get_new_page)
 
 def logged_in_as_owner(method):
     @functools.wraps(method)
@@ -94,10 +104,6 @@ def logged_in_as_owner(method):
                 return
             self.error(403)
         else:
-            logging.info("args num=%d"%len(args))
-            for k in kwargs:
-                logging.info("kwargs:%s"%k)
-            logging.info("---------------")
             if  kwargs.has_key('id'):
                 #check if the logged in user is the specified entry's owner
                 self.error(403)
@@ -111,7 +117,7 @@ class UpdateEntry(MyRequestHandler):
     """
     @logged_in_as_owner
     def get(self,key = None):
-        logging.info("UpdateEntry::get,key=%s"%key)
+        logging.info("UpdateEntry,key=",key)
         if key is None:
             entry  = None
             format = 'rs'

@@ -15,7 +15,7 @@
 
 <div id="container">
   <h1 id="header">
-     <a href="/">grep -v nonesense ~/brain</a>
+     <a href="/">grep -v nonesense ~/thoughts</a>
   </h1>
 
   <div id="page">
