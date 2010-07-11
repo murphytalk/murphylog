@@ -10,24 +10,24 @@ use custom tag if_show_private to determine wether to show content if entry is p
 {% load i18n %}
 
 <div class="atomentry">
+
   <h4 class="title">
       {% if_show_private entry user %}
          <a href="/blog/{{entry.key}}/" title={%trans "Click to read"%}> <img class="permalink" alt="permalink" src="/static/img/permalink.png" /></a>
 	 {% else %}
          <img class="permalink" alt="permalink" src="/static/img/permalink.png" />
       {% endif_show_private %}
-    {{ entry.title|highlight:highlight_keyword }}
+    {{ entry.title }}
   </h4>
-
 
   {% if_show_private entry user %}
      {% ifequal entry.format "rs" %}
-         {{ entry.subject|myRestructuredtext|highlight:highlight_keyword}}
+         {{ entry.subject|myRestructuredtext}}
      {% else %}
          {% ifequal entry.format "st" %}
-              {{ entry.subject|structuredtext|highlight:highlight_keyword}}
+              {{ entry.subject|structuredtext}}
          {% else %}
-              {{ entry.subject|BBCode|highlight:highlight_keyword}}
+              {{ entry.subject|BBCode}}
          {% endifequal %}
      {% endifequal %}
 
@@ -40,36 +40,37 @@ use custom tag if_show_private to determine wether to show content if entry is p
       {% if entry.text %}
 	  ―
          {% ifequal entry.format "rs" %}
-               {{ entry.text|myRestructuredtext|highlight:highlight_keyword}}
+               {{ entry.text|myRestructuredtext}}
          {% else %}
                {% ifequal entry.format "st" %}
-                   {{ entry.text|structuredtext|highlight:highlight_keyword }}
+                   {{ entry.text|structuredtext }}
                {% else %}
-                   {{ entry.text|BBCode|highlight:highlight_keyword}}
+                   {{ entry.text|BBCode}}
                {% endifequal %}
          {% endifequal %}
       {% endif %}
   {% endif %}
 
-  <div class="{%trans "entry_tag" %}" >&bull;
-  	  {% blocktrans with entry.owner.email as email and entry.owner.nickname as owner and entry.post_time|date:"H:i:s" as pdate and entry.last_edit|date:"Y-m-d H:i:s" as ledit%} Posted by <a href="mailto:{{email}}">{{owner}}</a> at {{pdate}} | last edited at {{ledit}}{% endblocktrans %}
+  <div class="{%trans "entry_tag" %}" >
 
-      {% ifequal entry.owner.id user.id %}
-          | <a href="/blog/edit/{{entry.key}}/">{%trans "Edit this article"%} </a>
-      {% endifequal %}
-{% comment %}
-  	        | <a href="/blog/{{entry.key}}/">{%trans "Comments"%} x {{comment_count}}</a>
-{% endcomment %}
+    &bull;
+    Posted by {{entry.owner.nickname}} on {{entry.get_post_time|date:"H:i:s"}}({{entry.get_post_time.tzname}}) | last edited on {{entry.get_ledit_time|date:"Y-m-d H:i:s"}}({{entry.get_ledit_time.tzname}})
+    {% ifequal entry.owner.user_id user.user_id %}
+      | <a href="/edit/{{entry.key}}/">{%trans "Edit this article"%} </a>
+    {% endifequal %}
 
-      {% if entry.private %}
-          | {%trans "This is a <font color=red>private</font> post"%}
-      {% endif %}<br>
-  	  &bull; {%trans "Tags :"%}
-  	  {% for pt in entry.getTags %}
-        <span title="{{pt.2}}">
-           <a href="/blog/tag/{{pt.0}}/">{{pt.1}}</a>&#32;
-  	      </span>
-  	  {% endfor %}
+    {% if entry.private %}
+      | {%trans "This is a <font color=red>private</font> post"%}
+    {% endif %}
+    <br>
+    &bull;
+    {%trans "Tags :"%}
+    {% for pt in entry.getTags %}
+    <span title="{{pt.2}}">
+      <a href="/blog/tag/{{pt.0}}/">{{pt.1}}</a>&#32;
+    </span>
+    {% endfor %}
 
-  </div>
- </div>
+  </div> <!-- div class= ... entry_tag -->
+
+</div> <!-- div class="atomentry" -->
