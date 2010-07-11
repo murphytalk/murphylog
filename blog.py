@@ -63,8 +63,8 @@ class Index(MyRequestHandler):
     """
     the root page
     """
-    def do_get(self,prev_bkmk,get_old,get_page):
-        entries,next_bkmk = get_page(prev_bkmk)
+    def do_get(self,bkmk,get_old,get_page):
+        entries,next_bkmk,prev_bkmk = get_page(bkmk)
         user  = users.get_current_user()
         if user:
             user_url = users.create_logout_url(self.request.uri)

@@ -17,17 +17,15 @@
     {% endfor %}
 
 
-    {% if new_page_bkmk %}
     <div id="pager">
+    {% if new_page_bkmk %}
        <a href="/prev/{{new_page_bkmk}}/">Newer posts</a>&nbsp;
-    </div>
     {% endif %}
 
     {% if old_page_bkmk %}
-    <div id="pager">
        <a href="/next/{{old_page_bkmk}}/">Older posts</a>&nbsp;
-    </div>
     {% endif %}
+    </div>
 
 
     {%comment%}
