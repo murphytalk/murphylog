@@ -17,41 +17,15 @@
     {% endfor %}
 
 
-    <div id="pager">
+    <div class="pager">
     {% if new_page_bkmk %}
-       <a href="/prev/{{new_page_bkmk}}/">Newer posts</a>&nbsp;
+    <a href="/prev/{{new_page_bkmk}}/"><< Newer posts</a>&nbsp;
     {% endif %}
 
     {% if old_page_bkmk %}
-       <a href="/next/{{old_page_bkmk}}/">Older posts</a>&nbsp;
+    <a href="/next/{{old_page_bkmk}}/">Older posts >></a>&nbsp;
     {% endif %}
     </div>
-
-
-    {%comment%}
-
-    {% if is_paginated %}
-
-    <!-- pager -->
-    <div id="pager">
-    &bull;&nbsp;{% trans "Older posts" %}&nbsp;&raquo;&nbsp;
-    {% for p in page_range%}
-      {% ifequal p page %}
-          {{p}}&nbsp;
-      {% else %}
-          {% if tag_id %}
-             <a href="/tag/{{tag_id}}/page/{{p}}/">{{p}}</a>&nbsp;
-          {% else %}
-             <a href="/page/{{p}}/">{{p}}</a>&nbsp;
-          {% endif %}
-      {% endifequal %}
-    {% endfor %}<p>
-
-    {% endif %}
-    </div>
-
-    {%endcomment%}
-
 
 {% else %}
     <p>No entries are available.</p>
