@@ -149,9 +149,37 @@ class PostEntry(MyRequestHandler):
             entry.text    = request.get('text')
             entry.format  = request.get('texttype')
 
-            #logging.info("private="+request.get('private'))
             private = request.get('private')
-            entry.private = private is not None
+            entry.private = (private is not None) and len(private)>0
+
+            tags = []
+
+            for t in request.get('tags').split():
+                q = Tag.gql('WHERE name = :1',t)
+                tag = q.get()
+                if tag is None:
+                    tag = Tag(name=t)
+                    tag.put()
+                tags.append(tag)
+
+            tag_keys = [ i.key() for i in tags ]
+
+            #removed tags
+            for t in entry.tags:
+                if t not in tag_keys:
+                    tag = Tag.get(t)
+                    tag.count-=1
+                    #logging.info("tag %s count-1 = %d"%(tag.name,tag.count))
+                    tag.put()
+                    entry.tags.remove(t)
+
+            #new tags
+            for t in tags:
+                if t.key() not in entry.tags:
+                    entry.tags.append(t.key())
+                    t.count+=1
+                    #logging.info("tag %s count+1 = %d"%(t.name,t.count))
+                    t.put()
 
         if key:
             #update

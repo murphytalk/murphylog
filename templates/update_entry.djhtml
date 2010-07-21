@@ -34,6 +34,12 @@
   <input type="checkbox" name="private" value="private" {% if entry.private %} checked {% endif %}/>
   </p>
 
+  <p>
+  <label>Tags</label>
+  <input type="text" name="tags" value="{% if entry.tags %}{{entry.get_tags_as_str}}{% endif %}"/>
+  </p>
+
+
   <div style="margin-left: 150px;">
    <input name= "post" type="submit" value="Post" >
    <input name="cancel" type="submit" value="Cancel" onclick="history.back()">

@@ -17,6 +17,15 @@ class Tag(db.Model):
     name    = db.StringProperty (required=True)
     count   = db.IntegerProperty(required=True,default=0)
 
+    @property
+    def entries(self):
+        return Entry.gql("WHERE tags = :1", self.key())
+
+    @classmethod
+    def get(cls,key):
+        q = db.Query(Tag)
+        q.filter('__key__ = ',key)
+        return q.get()
 
 ZERO  = datetime.timedelta(0)
 TOKYO = datetime.timedelta(hours=9)
@@ -57,10 +66,21 @@ class Entry(db.Model):
     post_time = db.DateTimeProperty(auto_now_add=True)
     last_edit = db.DateTimeProperty(auto_now_add=True)
 
+    tags = db.ListProperty(db.Key)
 
-    #tags = db.ListProperty(db.Category)
-    tags = db.ReferenceProperty(Tag)
-    #id = db.StringProperty()
+    def get_tags_as_str(self):
+        tags=""
+        for tk in self.tags:
+            tag = Tag.get(tk)
+            tags="%s %s"%(tags,tag.name)
+        return tags
+
+    def get_tags(self):
+        tags = []
+        for tk in self.tags:
+            tags.append( Tag.get(tk) )
+        return tags
+
 
     def get_post_time(self):
         return self.post_time.replace(tzinfo=UTC()).astimezone(MyTimeZone())
@@ -76,7 +96,6 @@ class Entry(db.Model):
 
         returns a pair of (results,oldpage_bkmk,newpage_bkmk)
         """
-
         if bookmark:
             bookmark_key = db.Key(bookmark)
             q = Entry.gql('WHERE __key__ %s :1 ORDER BY __key__ DESC'%(operator), bookmark_key)
