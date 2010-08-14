@@ -131,7 +131,7 @@ class Entry(db.Model):
                 #we use the last entry to seek back untill we have  ENTRIES_PER_PAGE entries
                 #need to set the 3rd parameter no_reverse to True
                 #otherwise there will be a infinite recursion if the total num is less than ENTRIES_PER_PAGE
-                 e,bk1,bk2 = Entry.get_new_page(str(entries[-1].key()),">=",True)
+                 e,bk1,bk2 = Entry.get_new_page(tag,str(entries[-1].key()),">=",True)
                  if e is not None:
                      entries      = e
                      newpage_bkmk = bk1
@@ -139,13 +139,14 @@ class Entry(db.Model):
         return (entries[:ENTRIES_PER_PAGE],oldpage_bkmk,newpage_bkmk)
 
     @classmethod
-    def get_new_page(cls,bookmark,operator='>',no_reverse=False):
+    def get_new_page(cls,tag,bookmark,operator='>',no_reverse=False):
         """
         get previous page of entries
         if bookmark has not been set then get from the latest entry
 
         returns a pair of (results,newpage_bkmk,oldpage_bkmk)
         """
+        logging.info("new page,tag=%s,bkmk=%s"%(tag,bookmark))
         if bookmark:
             bookmark_key = db.Key(bookmark)
             if tag is None:
@@ -174,7 +175,7 @@ class Entry(db.Model):
             if no_reverse:
                 return (None,None,None)
             else:
-                 e2,bk1,bk2 = Entry.get_old_page(str(entries[0].key()),"<=",True)
+                 e2,bk1,bk2 = Entry.get_old_page(tag,str(entries[0].key()),"<=",True)
                  if e2 is not None:
                      e            = e2
                      oldpage_bkmk = bk1

@@ -106,7 +106,7 @@ class Index(MyRequestHandler):
 
 class PrevPage(Index):
     def get(self,bookmark=None):
-        self.do_get(tag,bookmark,False,Entry.get_new_page)
+        self.do_get(None,bookmark,False,Entry.get_new_page)
 
 class TagIndex(Index):
     def get(self,tag,bookmark=None):
