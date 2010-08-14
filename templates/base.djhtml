@@ -97,6 +97,8 @@
 	<a href="http://www.gnu.org/software/emacs/">
 	  <img src="/static/img/powered-by/emacs-powered-blue.jpg" alt="This site is Emacs powered."  border="0" title="{% trans "Edit in Emacs"%}"> </a>
       </p>
+
+        <img src="/static/img/gmail.png" alt="mail" border="0" title="mail">
       </span>
 
       {% if user.is_anonymous %}

@@ -5,6 +5,8 @@ import os.path
 from google.appengine.ext        import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.api        import users
+from google.appengine.api        import datastore_errors
+
 
 from model  import *
 from defs   import *
@@ -14,12 +16,6 @@ import logging
 
 from django.conf import settings
 
-
-#class NotFoundPageHandler(webapp.RequestHandler):
-#    def get(self):
-#        logging.info("it's a 404")
-#        self.error(404)
-#        #self.response.out.write('<Your 404 error html page>')
 
 class MyRequestHandler(webapp.RequestHandler):
     """
@@ -59,12 +55,23 @@ class MyRequestHandler(webapp.RequestHandler):
         self.response.out.write(template.render(template_path, template_vars))
 
 
+class NotFoundPageHandler(MyRequestHandler):
+    def get(self):
+        #self.error(404)
+        self.render_template('404.djhtml',None)
+
 class Index(MyRequestHandler):
     """
     the root page
     """
-    def do_get(self,bkmk,get_old,get_page):
-        entries,next_bkmk,prev_bkmk = get_page(bkmk)
+    def do_get(self,tag,bkmk,get_old,get_page):
+        logging.info("tag=%s,bkmk=%s"%(tag,bkmk))
+        try:
+            entries,next_bkmk,prev_bkmk = get_page(bkmk)
+        except datastore_errors.BadKeyError:
+            self.render_template('404.djhtml',None)
+            return
+
         user  = users.get_current_user()
         if user:
             user_url = users.create_logout_url(self.request.uri)
@@ -87,12 +94,12 @@ class Index(MyRequestHandler):
 
         self.render_template('index.djhtml',template_values)
 
-    def get(self,new_page_bookmark=None):
-        self.do_get(new_page_bookmark,True,Entry.get_old_page)
+    def get(self,new_page_bookmark=None,tag=None):
+        self.do_get(tag,new_page_bookmark,True,Entry.get_old_page)
 
 class PrevPage(Index):
-    def get(self,bookmark=None):
-        self.do_get(bookmark,False,Entry.get_new_page)
+    def get(self,bookmark=None,tag=None):
+        self.do_get(tag,bookmark,False,Entry.get_new_page)
 
 def logged_in_as_owner(method):
     @functools.wraps(method)
@@ -183,7 +190,11 @@ class PostEntry(MyRequestHandler):
 
         if key:
             #update
-            entry = Entry.get(key)
+            try:
+                entry = Entry.get(key)
+            except datastore_errors.BadKeyError:
+                self.render_template('404.djhtml',None)
+                return
         else:
             #new
             entry = Entry()
@@ -203,7 +214,13 @@ class ShowEntry(MyRequestHandler):
                 user_url = users.create_logout_url(self.request.uri)
             else:
                 user_url = users.create_login_url(self.request.uri)
-            entry = Entry.get(key)
+
+            try:
+                entry = Entry.get(key)
+            except datastore_errors.BadKeyError:
+                self.render_template('404.djhtml',None)
+                return
+
             template_values = {
                 'entry'     : entry,
                 'user_url'  : user_url,
