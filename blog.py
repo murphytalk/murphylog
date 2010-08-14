@@ -67,7 +67,14 @@ class Index(MyRequestHandler):
     def do_get(self,tag,bkmk,get_old,get_page):
         logging.info("tag=%s,bkmk=%s"%(tag,bkmk))
         try:
-            entries,next_bkmk,prev_bkmk = get_page(bkmk)
+            if tag is None:
+                tagobj = None
+            else:
+                q = db.Query(Tag)
+                q.filter('__key__ = ', db.Key(tag))
+                tagobj = q.get()
+
+            entries,next_bkmk,prev_bkmk = get_page(tagobj,bkmk)
         except datastore_errors.BadKeyError:
             self.render_template('404.djhtml',None)
             return
@@ -94,12 +101,21 @@ class Index(MyRequestHandler):
 
         self.render_template('index.djhtml',template_values)
 
-    def get(self,new_page_bookmark=None,tag=None):
-        self.do_get(tag,new_page_bookmark,True,Entry.get_old_page)
+    def get(self,new_page_bookmark=None):
+        self.do_get(None,new_page_bookmark,True,Entry.get_old_page)
 
 class PrevPage(Index):
-    def get(self,bookmark=None,tag=None):
+    def get(self,bookmark=None):
         self.do_get(tag,bookmark,False,Entry.get_new_page)
+
+class TagIndex(Index):
+    def get(self,tag,bookmark=None):
+        self.do_get(tag,bookmark,True,Entry.get_old_page)
+
+class TagPrevPage(Index):
+    def get(self,tag,bookmark=None):
+        self.do_get(tag,bookmark,False,Entry.get_new_page)
+
 
 def logged_in_as_owner(method):
     @functools.wraps(method)

@@ -68,6 +68,9 @@ class Entry(db.Model):
 
     tags = db.ListProperty(db.Key)
 
+#    def __str__(self):
+#        return self.title
+
     def get_tags_as_str(self):
         tags=""
         for tk in self.tags:
@@ -89,7 +92,7 @@ class Entry(db.Model):
         return self.last_edit.replace(tzinfo=UTC()).astimezone(MyTimeZone())
 
     @classmethod
-    def get_old_page(cls,bookmark,operator = "<", no_reverse = False):
+    def get_old_page(cls,tag,bookmark,operator = "<", no_reverse = False):
         """
         get next page of entries
         if bookmark has not been set then get from the latest entry
@@ -98,9 +101,15 @@ class Entry(db.Model):
         """
         if bookmark:
             bookmark_key = db.Key(bookmark)
-            q = Entry.gql('WHERE __key__ %s :1 ORDER BY __key__ DESC'%(operator), bookmark_key)
+            if tag is None:
+                q = Entry.gql('WHERE __key__ %s :1 ORDER BY __key__ DESC'%(operator), bookmark_key)
+            else:
+                q = Entry.gql('WHERE tags = :1 AND __key__ %s :2 ORDER BY __key__ DESC'%(operator),tag,bookmark_key)
         else:
-            q = Entry.gql('ORDER BY __key__ DESC')
+            if tag is None:
+                q = Entry.gql('ORDER BY __key__ DESC')
+            else:
+                q = Entry.gql('WHERE tags = :1 ORDER BY __key__ DESC',tag)
 
         entries = q.fetch(ENTRIES_PER_PAGE+1)
 
@@ -139,9 +148,16 @@ class Entry(db.Model):
         """
         if bookmark:
             bookmark_key = db.Key(bookmark)
-            q = Entry.gql('WHERE __key__ %s :1 ORDER BY __key__ ASC'%(operator), bookmark_key)
+            if tag is None:
+                q = Entry.gql('WHERE __key__ %s :1 ORDER BY __key__ ASC'%(operator), bookmark_key)
+            else:
+                q = Entry.gql('WHERE tags = :1 AND __key__ %s :2 ORDER BY __key__ ASC'%(operator),tag,bookmark_key)
+
         else:
-            q = Entry.gql('ORDER BY __key__ ASC')
+            if tag is None:
+                q = Entry.gql('ORDER BY __key__ ASC')
+            else:
+                q = Entry.gql('WHERE tags = :1 ORDER BY __key__ ASC',tag)
 
         entries = q.fetch(ENTRIES_PER_PAGE+1)
 

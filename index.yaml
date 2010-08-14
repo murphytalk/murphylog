@@ -14,3 +14,9 @@ indexes:
   properties:
   - name: __key__
     direction: desc
+
+- kind: Entry
+  properties:
+  - name: tags
+  - name: __key__
+    direction: desc
