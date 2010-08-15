@@ -7,6 +7,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.api        import users
 from google.appengine.api        import datastore_errors
 
+from mytwitter import get_my_tweets
 
 from model  import *
 from defs   import *
@@ -65,7 +66,6 @@ class Index(MyRequestHandler):
     the root page
     """
     def do_get(self,tag,bkmk,get_old,get_page):
-        logging.info("tag=%s,bkmk=%s"%(tag,bkmk))
         try:
             if tag is None:
                 tagobj = None

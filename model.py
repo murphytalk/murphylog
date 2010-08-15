@@ -146,7 +146,6 @@ class Entry(db.Model):
 
         returns a pair of (results,newpage_bkmk,oldpage_bkmk)
         """
-        logging.info("new page,tag=%s,bkmk=%s"%(tag,bookmark))
         if bookmark:
             bookmark_key = db.Key(bookmark)
             if tag is None:
