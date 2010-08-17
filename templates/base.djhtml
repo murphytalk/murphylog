@@ -43,15 +43,51 @@
 
 <!-- the page sidebar -->
     <div id="sidebar">
-      Firefox sucks less than the others <img src="/static/img/smileys_yellow/cheesygrin.gif"/>
-      <span id = "powered-by">
-       <div class="powered-by">
-       	<a href="http://www.spreadfirefox.com/">
-        	  <img border="0" alt="Spread Firefox" title="Spread Firefox"
-	                 src="/static/img/firefox/firefox.gif"/>
-        </a>
+
+      <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+      <script>
+	new TWTR.Widget({
+	  version: 2,
+	  type: 'profile',
+	  rpp: 4,
+	  interval: 6000,
+	  width: 195,
+	  height: 300,
+	  theme: {
+	    shell: {
+	      background: '#333333',
+	      color: '#ffffff'
+	    },
+	    tweets: {
+	      background: '#000000',
+	      color: '#ffffff',
+	      links: '#4aed05'
+	    }
+	  },
+	  features: {
+	    scrollbar: false,
+	    loop: false,
+	    live: false,
+	    hashtags: true,
+	    timestamp: true,
+	    avatars: false,
+	    behavior: 'all'
+	  }
+	}).render().setUser('murphytalk').start();
+      </script>
+
+{%comment%}
+      http://www-open-opensocial.googleusercontent.com/gadgets/ifr?v=fdb2b406636e1f3cff1c5d7e660f59eb&container=open&nocache=0&debug=0&view=home&lang=all&url=http%3A%2F%2Fcode.google.com%2Fappengine%2Freddit_gadget.xml&country=ALL&source=http%3A%2F%2Fcode.google.com%2Fappengine%2F&parent=http%3A%2F%2Fcode.google.com%2Fappengine%2F&libs=core%3Acore.io%3Arpc#rpctoken=245746489
+
+      <div style="font-family: verdana,arial,helvetica,sans-serif; background-color: rgb(255, 255, 255); border: 1px solid rgb(51, 102, 153);">
+        <div class="twitter-header" style="padding: 5px 5px 1px; background-color: rgb(206, 227, 248);">
+          <h4 class="twitter-title" style="margin: 0pt; padding-bottom: 3px;">
+            My Twitter account <a href="http://www.twitter.com/murphytalk" style="text-decoration: none; color: rgb(51, 102, 153);">@murphytalk</a>
+          </h4>
+        </div>
       </div>
-      </span>
+
+      <p>
 
       <h3 class="sidbar-title">{% trans "Tags"%}</h3>
       <div class="tag-cloud">
@@ -61,13 +97,10 @@
   	</span>
 	{% endfor %}
       </div>
+{%endcomment%}
 
       <p>
 
-      <h3>{% trans "Links"%}</h3>
-      <ul>
-	<li><a href="http://del.icio.us/murphytalk">My del.icio.us</a></li>
-      </ul>
 
       <h3>{% trans "Comments"%}</h3>
       <ul>

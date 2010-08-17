@@ -19,19 +19,30 @@ import logging
 #class MyTweets(MyRequestHandler):
 #    def get(self):
 
-def get_my_tweets():
-    oauth_token, oauth_token_secret = read_token_file(OAUTH_FILENAME)
+def get_twitter(need_auth=False):
+    if need_auth:
+        oauth_token, oauth_token_secret = read_token_file(OAUTH_FILENAME)
+        auth=OAuth(oauth_token, oauth_token_secret, CONSUMER_KEY, CONSUMER_SECRET)
+    else:
+        auth=None
 
     twitter = Twitter(
-        auth=OAuth(oauth_token, oauth_token_secret, CONSUMER_KEY, CONSUMER_SECRET),
+        auth=auth,
         secure=True,
         api_version='1',
         domain='api.twitter.com')
 
-    tweets = twitter.statuses.user_timeline()
+    return twitter
+
+def get_my_tweets():
+    twitter = get_twitter()
+    tweets = twitter.statuses.user_timeline(user_id="murpytalk",count=5)
     for t in tweets:
-        #print t["text"]
-        logging.info(t["text"])
+        logging.info(t)
+
+def get_my_twitter_profile():
+    twitter = get_twitter()
+    return twitter.users.show(id="murphytalk")
 
 
 def auth():
