@@ -14,9 +14,12 @@
 <body>
 
 <div id="container">
-  <h1 id="header">
-     <a href="/">grep -v nonesense ~/thoughts</a>
-  </h1>
+  <div id="header" align="center">
+    <a href="/">
+      <img src="/static/img/title.gif" alt="山河奄有中華地 日月重開大漢天" />
+    </a>
+  </div>
+
 
   <div id="page">
     <div id="heading">

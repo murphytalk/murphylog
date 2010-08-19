@@ -1,19 +1,8 @@
 /*--------------------------------------------------------------
  Header
  --------------------------------------------------------------*/
-h1#header {
-    background:none repeat scroll 0 0 #E8E8E8;
-    /*border:medium solid #444444;border-width:thin;*/
-    border-top-style: solid;
-    border-top-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    font-family:consolas;monospace;
-    font-size:200%;
-    letter-spacing:0.1em;
-    margin:0;
-    padding:0.25em;
-    text-decoration:none;
+#header {
+    background: url("img/header_shadow.gif") repeat-x scroll left bottom transparent
 }
 
 #header a:link,
@@ -24,7 +13,8 @@ h1#header {
 
 #header a:hover,
 #header a:active {
-	color:#930; background: transparent;
+	color:#993300;;
+        background: none repeat scroll 0 0 transparent;
 	text-decoration: none;
 }
 

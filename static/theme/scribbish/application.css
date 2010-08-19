@@ -12,8 +12,9 @@
                #content form.comments { display:none; } }
 
 body {
-	font-family: "Trebuchet MS", Verdana, helvetica, sans-serif;
-	font-size: small;
+    background: url("img/background.gif") repeat-x scroll left top transparent;
+    font-family: "Trebuchet MS", Verdana, helvetica, sans-serif;
+    font-size: small;
 }
 
 input,
