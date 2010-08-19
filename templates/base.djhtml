@@ -46,39 +46,9 @@
 
 <!-- the page sidebar -->
     <div id="sidebar">
-
-      <script src="http://widgets.twimg.com/j/2/widget.js"></script>
-      <script>
-	new TWTR.Widget({
-	  version: 2,
-	  type: 'profile',
-	  rpp: 4,
-	  interval: 6000,
-	  width: 195,
-	  height: 300,
-	  theme: {
-	    shell: {
-	      background: '#333333',
-	      color: '#ffffff'
-	    },
-	    tweets: {
-	      background: '#000000',
-	      color: '#ffffff',
-	      links: '#4aed05'
-	    }
-	  },
-	  features: {
-	    scrollbar: false,
-	    loop: false,
-	    live: false,
-	    hashtags: true,
-	    timestamp: true,
-	    avatars: false,
-	    behavior: 'all'
-	  }
-	}).render().setUser('murphytalk').start();
-      </script>
-
+      <span id = "powered-by">
+        <a href="http://www.twitter.com/murphytalk"><img src="http://twitter-badges.s3.amazonaws.com/follow_me-b.png" alt="Follow murphytalk on Twitter"/></a>
+      </span>
 {%comment%}
       http://www-open-opensocial.googleusercontent.com/gadgets/ifr?v=fdb2b406636e1f3cff1c5d7e660f59eb&container=open&nocache=0&debug=0&view=home&lang=all&url=http%3A%2F%2Fcode.google.com%2Fappengine%2Freddit_gadget.xml&country=ALL&source=http%3A%2F%2Fcode.google.com%2Fappengine%2F&parent=http%3A%2F%2Fcode.google.com%2Fappengine%2F&libs=core%3Acore.io%3Arpc#rpctoken=245746489
 
@@ -89,6 +59,7 @@
           </h4>
         </div>
       </div>
+{%endcomment%}
 
       <p>
 
@@ -100,7 +71,6 @@
   	</span>
 	{% endfor %}
       </div>
-{%endcomment%}
 
       <p>
 

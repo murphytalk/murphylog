@@ -7,7 +7,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.api        import users
 from google.appengine.api        import datastore_errors
 
-from mytwitter import get_my_tweets,get_my_twitter_profile
+#from mytwitter import get_my_tweets,get_my_twitter_profile
 
 from model  import *
 from defs   import *
