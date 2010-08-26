@@ -17,6 +17,7 @@ import logging
 
 from django.conf import settings
 
+USERFILE="users.txt"
 
 class MyRequestHandler(webapp.RequestHandler):
     """
@@ -61,6 +62,17 @@ class NotFoundPageHandler(MyRequestHandler):
         #self.error(404)
         self.render_template('404.djhtml',None)
 
+def is_valid_user(user):
+    emails = open(USERFILE).readlines()
+    for e in emails:
+        if e[0]=='#':
+            continue
+        if e[-1]=='\n' or e[-1]=='\r':
+            e = e[0:-1]
+        if user.email()==e:
+            return True
+    return False
+
 class Index(MyRequestHandler):
     """
     the root page
@@ -82,6 +94,9 @@ class Index(MyRequestHandler):
             return
 
         user  = users.get_current_user()
+        if user and not is_valid_user(user):
+            user = None
+
         if user:
             user_url = users.create_logout_url(self.request.uri)
         else:
@@ -129,9 +144,14 @@ def logged_in_as_owner(method):
                 return
             self.error(403)
         else:
-            if  kwargs.has_key('id'):
+            if  kwargs.has_key('key'):
                 #check if the logged in user is the specified entry's owner
-                self.error(403)
+                try:
+                    entry = Entry.get(key)
+                except datastore_errors.BadKeyError:
+                    self.error(403)
+                if entry.owner.user_id()<>user.user_id():
+                    self.error(403)
             return method(self, *args, **kwargs)
     return wrapper
 
@@ -142,7 +162,6 @@ class UpdateEntry(MyRequestHandler):
     """
     @logged_in_as_owner
     def get(self,key = None):
-        logging.info("UpdateEntry,key=",key)
         if key is None:
             entry  = None
             format = 'rs'
