@@ -40,7 +40,8 @@ def export_list(tag_lst):
 class EntryExporter(bulkloader.Exporter):
     def __init__(self):
         bulkloader.Exporter.__init__(self,'Entry',
-                                     [('title'    ,lambda x: x.encode('utf-8'),None),
+                                     [('entry_id' ,str,None),
+                                      ('title'    ,lambda x: x.encode('utf-8'),None),
                                       ('subject'  ,lambda x: x.encode('utf-8'),None),
                                       ('text'     ,lambda x: x.encode('utf-8'),None),
                                       ('owner'    ,lambda x: x.email()        ,None),
@@ -77,7 +78,8 @@ def import_list(tag_keyname):
 class EntryImporter(bulkloader.Loader):
     def __init__(self):
         bulkloader.Loader.__init__(self,'Entry' ,
-                                   [('title'    ,lambda x: x.decode('utf-8')),
+                                   [('entry_id' ,int),
+                                    ('title'    ,lambda x: x.decode('utf-8')),
                                     ('subject'  ,lambda x: x.decode('utf-8')),
                                     ('text'     ,lambda x: x.decode('utf-8')),
                                     ('owner'    ,lambda x: users.User(x)),
