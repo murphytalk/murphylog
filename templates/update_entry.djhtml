@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<form method="post" action="{% if entry %}/post/{{key}}/{% else %}/post-new/{% endif %}" method="post" class="cssform" id="update-entry-form">
+<form method="post" action="{% if entry %}/post/{{id}}/{% else %}/post-new/{% endif %}" method="post" class="cssform" id="update-entry-form">
   <p>
   <label>Title</label>
   <input type="text" name="title" value="{% if entry.title %}{{entry.title|escape}}{% endif %}"/>

@@ -161,16 +161,16 @@ class UpdateEntry(MyRequestHandler):
     edit post page
     """
     @logged_in_as_owner
-    def get(self,key = None):
-        if key is None:
+    def get(self,eid = None):
+        if eid is None:
             entry  = None
             format = 'rs'
         else:
-            entry  = Entry.get(key)
+            entry  = Entry.get(eid)
             format = entry.format
 
         template_values = {
-            'key'      : key,
+            'id'       : eid,
             'user'     : users.get_current_user(),
             'entry'    : entry,
             'format'   : format,
@@ -186,7 +186,7 @@ class PostEntry(MyRequestHandler):
         self.redirect('/')
 
     @logged_in_as_owner
-    def post(self,key = None):
+    def post(self,eid = None):
         def get_contents(entry,request):
             entry.title   = request.get('title')
             entry.subject = request.get('subject')
@@ -225,10 +225,10 @@ class PostEntry(MyRequestHandler):
                     #logging.info("tag %s count+1 = %d"%(t.name,t.count))
                     t.put()
 
-        if key:
+        if eid:
             #update
             try:
-                entry = Entry.get(key)
+                entry = Entry.get(eid)
             except datastore_errors.BadKeyError:
                 self.render_template('404.djhtml',None)
                 return
@@ -242,8 +242,8 @@ class PostEntry(MyRequestHandler):
         self.redirect('/')
 
 class ShowEntry(MyRequestHandler):
-    def get(self,key=None):
-        if key is None:
+    def get(self,eid=None):
+        if eid is None:
             self.redirect("/")
         else:
             user  = users.get_current_user()
@@ -253,7 +253,7 @@ class ShowEntry(MyRequestHandler):
                 user_url = users.create_login_url(self.request.uri)
 
             try:
-                entry = Entry.get(key)
+                entry = Entry.get(eid)
             except datastore_errors.BadKeyError:
                 self.render_template('404.djhtml',None)
                 return

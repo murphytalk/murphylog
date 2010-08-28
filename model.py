@@ -56,12 +56,13 @@ class Entry(db.Model):
 
     provide some class function to manipulate quries and results
     """
-    title   = db.StringProperty(required=False)
-    subject = db.TextProperty()
-    text    = db.TextProperty()
-    owner   = db.UserProperty(auto_current_user_add=True)
-    private = db.BooleanProperty(required=True, default=False)
-    format  = db.StringProperty(required=True, default="rs",choices=set(["rs", "st", "bb"]),indexed=False)
+    entry_id = db.IntegerProperty(required=True)
+    title    = db.StringProperty(required=False)
+    subject  = db.TextProperty()
+    text     = db.TextProperty()
+    owner    = db.UserProperty(auto_current_user_add=True)
+    private  = db.BooleanProperty(required=True, default=False)
+    format   = db.StringProperty(required=True, default="rs",choices=set(["rs", "st", "bb"]),indexed=False)
 
     post_time = db.DateTimeProperty(auto_now_add=True)
     last_edit = db.DateTimeProperty(auto_now_add=True)
@@ -100,16 +101,16 @@ class Entry(db.Model):
         returns a pair of (results,oldpage_bkmk,newpage_bkmk)
         """
         if bookmark:
-            bookmark_key = db.Key(bookmark)
+            #bookmark_key = db.Key(bookmark)
             if tag is None:
-                q = Entry.gql('WHERE __key__ %s :1 ORDER BY __key__ DESC'%(operator), bookmark_key)
+                q = Entry.gql('WHERE entry_id %s :1 ORDER BY entry_id DESC'%(operator), int(bookmark))
             else:
-                q = Entry.gql('WHERE tags = :1 AND __key__ %s :2 ORDER BY __key__ DESC'%(operator),tag,bookmark_key)
+                q = Entry.gql('WHERE tags = :1 AND entry_id %s :2 ORDER BY entry_id DESC'%(operator),tag,bookmark_key)
         else:
             if tag is None:
-                q = Entry.gql('ORDER BY __key__ DESC')
+                q = Entry.gql('ORDER BY entry_id DESC')
             else:
-                q = Entry.gql('WHERE tags = :1 ORDER BY __key__ DESC',tag)
+                q = Entry.gql('WHERE tags = :1 ORDER BY entry_id DESC',tag)
 
         entries = q.fetch(ENTRIES_PER_PAGE+1)
 
@@ -117,12 +118,12 @@ class Entry(db.Model):
         if bookmark:
             #bookmark is not None means it is switched from newer page
             #so save the first(newest) entry of this page as bookmark to seek to newer page
-            newpage_bkmk = str(entries[0].key())
+            newpage_bkmk = str(entries[0].entry_id)
 
         num = len(entries)
 
         if num == ENTRIES_PER_PAGE+1:
-            oldpage_bkmk=str(entries[ENTRIES_PER_PAGE-1].key())
+            oldpage_bkmk=str(entries[ENTRIES_PER_PAGE-1].entry_id)
         elif num<ENTRIES_PER_PAGE and num > 0:
             if no_reverse:
                 return (None,None,None)
@@ -131,7 +132,7 @@ class Entry(db.Model):
                 #we use the last entry to seek back untill we have  ENTRIES_PER_PAGE entries
                 #need to set the 3rd parameter no_reverse to True
                 #otherwise there will be a infinite recursion if the total num is less than ENTRIES_PER_PAGE
-                 e,bk1,bk2 = Entry.get_new_page(tag,str(entries[-1].key()),">=",True)
+                 e,bk1,bk2 = Entry.get_new_page(tag,str(entries[-1].entry_id),">=",True)
                  if e is not None:
                      entries      = e
                      newpage_bkmk = bk1
@@ -149,15 +150,15 @@ class Entry(db.Model):
         if bookmark:
             bookmark_key = db.Key(bookmark)
             if tag is None:
-                q = Entry.gql('WHERE __key__ %s :1 ORDER BY __key__ ASC'%(operator), bookmark_key)
+                q = Entry.gql('WHERE entry_id %s :1 ORDER BY entry_id ASC'%(operator), bookmark_key)
             else:
-                q = Entry.gql('WHERE tags = :1 AND __key__ %s :2 ORDER BY __key__ ASC'%(operator),tag,bookmark_key)
+                q = Entry.gql('WHERE tags = :1 AND entry_id %s :2 ORDER BY entry_id ASC'%(operator),tag,bookmark_key)
 
         else:
             if tag is None:
-                q = Entry.gql('ORDER BY __key__ ASC')
+                q = Entry.gql('ORDER BY entry_id ASC')
             else:
-                q = Entry.gql('WHERE tags = :1 ORDER BY __key__ ASC',tag)
+                q = Entry.gql('WHERE tags = :1 ORDER BY entry_id ASC',tag)
 
         entries = q.fetch(ENTRIES_PER_PAGE+1)
 
@@ -186,7 +187,7 @@ class Entry(db.Model):
         return (e,newpage_bkmk,oldpage_bkmk)
 
     @classmethod
-    def get(cls,key):
+    def get(cls,entry_id):
         q = db.Query(Entry)
-        q.filter('__key__ = ', db.Key(key))
+        q.filter('entry_id = ',int(entry_id))
         return q.get()

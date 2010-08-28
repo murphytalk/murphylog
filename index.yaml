@@ -20,3 +20,8 @@ indexes:
   - name: tags
   - name: __key__
     direction: desc
+
+- kind: Tag
+  properties:
+  - name: __key__
+    direction: desc

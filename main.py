@@ -30,17 +30,17 @@ from blog import *
 template.register_template_library('template_tag_filter.tag_filter')
 
 application = webapp.WSGIApplication(
-  [(r'/'                      , Index),
-   (r'/prev/([0-9a-zA-Z\-]+)/', PrevPage),
-   (r'/next/([0-9a-zA-Z\-]+)/', Index),
-   (r'/new/'                  , UpdateEntry),
-   (r'/edit/([0-9a-zA-Z\-]+)/', UpdateEntry),
-   (r'/post/([0-9a-zA-Z\-]+)/', PostEntry),
-   (r'/post-new/'             , PostEntry),
-   (r'/blog/([0-9a-zA-Z\-]+)/', ShowEntry),
-   (r'/tag/([0-9a-zA-Z\-]+)/' , TagIndex),
-   (r'/tag/([0-9a-zA-Z\-]+)/prev/([0-9a-zA-Z\-]+)/' , TagPrevPage),
-   (r'/tag/([0-9a-zA-Z\-]+)/next/([0-9a-zA-Z\-]+)/' , TagIndex),
+  [(r'/'              , Index),
+   (r'/prev/([0-9]+)/', PrevPage),
+   (r'/next/([0-9]+)/', Index),
+   (r'/new/'          , UpdateEntry),
+   (r'/edit/([0-9]+)/', UpdateEntry),
+   (r'/post/([0-9]+)/', PostEntry),
+   (r'/post-new/'     , PostEntry),
+   (r'/blog/([0-9]+)/', ShowEntry),
+   (r'/tag/([0-9a-zA-Z\-]+)/'                , TagIndex),
+   (r'/tag/([0-9a-zA-Z\-]+)/prev/([0-9a]+)/' , TagPrevPage),
+   (r'/tag/([0-9a-zA-Z\-]+)/next/([0-9a]+)/' , TagIndex),
    (r'/.*'                    , NotFoundPageHandler)
   ],
   debug=True)

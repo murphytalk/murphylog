@@ -13,7 +13,7 @@ use custom tag if_show_private to determine wether to show content if entry is p
 
   <h4 class="title">
       {% if_show_private entry user %}
-         <a href="/blog/{{entry.key}}/" title={%trans "Click to read"%}> <img class="permalink" alt="permalink" src="/static/img/permalink.png" /></a>
+         <a href="/blog/{{entry.entry_id}}/" title={%trans "Click to read"%}> <img class="permalink" alt="permalink" src="/static/img/permalink.png" /></a>
 	 {% else %}
          <img class="permalink" alt="permalink" src="/static/img/permalink.png" />
       {% endif_show_private %}
@@ -32,7 +32,7 @@ use custom tag if_show_private to determine wether to show content if entry is p
      {% endifequal %}
 
      {% if not show_detail and entry.text %}
-         &nbsp; &nbsp; &bull;&nbsp;<a href="/blog/{{entry.key}}/">{%trans "Read more"%} &raquo;</a><p>
+         &nbsp; &nbsp; &bull;&nbsp;<a href="/blog/{{entry.entry_id}}/">{%trans "Read more"%} &raquo;</a><p>
      {% endif %}
   {% endif_show_private %}
 
@@ -56,7 +56,7 @@ use custom tag if_show_private to determine wether to show content if entry is p
     &bull;
     Posted by {{entry.owner.nickname}} on {{entry.get_post_time|date:"H:i:s"}}({{entry.get_post_time.tzname}}) | last edited on {{entry.get_ledit_time|date:"Y-m-d H:i:s"}}({{entry.get_ledit_time.tzname}})
     {% ifequal entry.owner.user_id user.user_id %}
-      | <a href="/edit/{{entry.key}}/">{%trans "Edit this article"%} </a>
+      | <a href="/edit/{{entry.entry_id}}/">{%trans "Edit this article"%} </a>
     {% endifequal %}
 
     {% if entry.private %}
