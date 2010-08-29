@@ -93,37 +93,36 @@ class Entry(db.Model):
         return self.last_edit.replace(tzinfo=UTC()).astimezone(MyTimeZone())
 
     @classmethod
-    def get_old_page(cls,tag,bookmark,operator = "<", no_reverse = False):
-        """
-        get next page of entries
-        if bookmark has not been set then get from the latest entry
+    def get_page(cls,get_older_page,tag,bookmark,operator,no_revers):
+        if get_older_page:
+            sort = 'DESC'
+        else:
+            sort = 'ASC'
 
-        returns a pair of (results,oldpage_bkmk,newpage_bkmk)
-        """
         if bookmark:
-            #bookmark_key = db.Key(bookmark)
             if tag is None:
-                q = Entry.gql('WHERE entry_id %s :1 ORDER BY entry_id DESC'%(operator), int(bookmark))
+                q = Entry.gql('WHERE entry_id %s :1 ORDER BY entry_id %s'%(operator,sort), int(bookmark))
             else:
-                q = Entry.gql('WHERE tags = :1 AND entry_id %s :2 ORDER BY entry_id DESC'%(operator),tag,bookmark_key)
+                q = Entry.gql('WHERE tags = :1 AND entry_id %s :2 ORDER BY entry_id %s'%(operator,sort),tag,bookmark)
         else:
             if tag is None:
-                q = Entry.gql('ORDER BY entry_id DESC')
+                q = Entry.gql('ORDER BY entry_id %s'%sort)
             else:
-                q = Entry.gql('WHERE tags = :1 ORDER BY entry_id DESC',tag)
+                q = Entry.gql('WHERE tags = :1 ORDER BY entry_id %s'%sort,tag)
 
         entries = q.fetch(ENTRIES_PER_PAGE+1)
 
-        oldpage_bkmk = newpage_bkmk = None
+        next_page_bkmk = prev_page_bkmk = None
+
         if bookmark:
-            #bookmark is not None means it is switched from newer page
-            #so save the first(newest) entry of this page as bookmark to seek to newer page
-            newpage_bkmk = str(entries[0].entry_id)
+            #bookmark is not None means it is switched from last page
+            #so save the first(newest if get_older_page==False) entry of this page as bookmark to seek to previous page
+            prev_page_bkmk = str(entries[0].entry_id)
 
         num = len(entries)
 
         if num == ENTRIES_PER_PAGE+1:
-            oldpage_bkmk=str(entries[ENTRIES_PER_PAGE-1].entry_id)
+            next_page_bkmk=str(entries[ENTRIES_PER_PAGE-1].entry_id)
         elif num<ENTRIES_PER_PAGE and num > 0:
             if no_reverse:
                 return (None,None,None)
@@ -132,12 +131,33 @@ class Entry(db.Model):
                 #we use the last entry to seek back untill we have  ENTRIES_PER_PAGE entries
                 #need to set the 3rd parameter no_reverse to True
                 #otherwise there will be a infinite recursion if the total num is less than ENTRIES_PER_PAGE
-                 e,bk1,bk2 = Entry.get_new_page(tag,str(entries[-1].entry_id),">=",True)
-                 if e is not None:
-                     entries      = e
-                     newpage_bkmk = bk1
+                if get_older_page:
+                    op = ">=" #we need to include the last entry so need = here
+                else:
+                    op = "<="
+                e,bk1,bk2 = Entry.get_page(not get_older_page,tag,str(entries[-1].entry_id),op,True)
+                if e is not None:
+                    entries      = e
+                    newpage_bkmk = bk1
 
-        return (entries[:ENTRIES_PER_PAGE],oldpage_bkmk,newpage_bkmk)
+        if num>=ENTRIES_PER_PAGE:
+            e = entries[:ENTRIES_PER_PAGE]
+
+        if not get_older_page:
+            e.reverse()
+
+        return (e,next_page_bkmk,prev_page_bkmk)
+
+
+    @classmethod
+    def get_old_page(cls,tag,bookmark,operator = "<", no_reverse = False):
+        """
+        get next page of entries
+        if bookmark has not been set then get from the latest entry
+
+        returns a pair of (results,oldpage_bkmk,newpage_bkmk)
+        """
+        return Entry.get_page(True,tag,bookmark,operator,no_reverse)
 
     @classmethod
     def get_new_page(cls,tag,bookmark,operator='>',no_reverse=False):
@@ -147,44 +167,7 @@ class Entry(db.Model):
 
         returns a pair of (results,newpage_bkmk,oldpage_bkmk)
         """
-        if bookmark:
-            bookmark_key = db.Key(bookmark)
-            if tag is None:
-                q = Entry.gql('WHERE entry_id %s :1 ORDER BY entry_id ASC'%(operator), bookmark_key)
-            else:
-                q = Entry.gql('WHERE tags = :1 AND entry_id %s :2 ORDER BY entry_id ASC'%(operator),tag,bookmark_key)
-
-        else:
-            if tag is None:
-                q = Entry.gql('ORDER BY entry_id ASC')
-            else:
-                q = Entry.gql('WHERE tags = :1 ORDER BY entry_id ASC',tag)
-
-        entries = q.fetch(ENTRIES_PER_PAGE+1)
-
-        oldpage_bkmk = newpage_bkmk = None
-
-        if bookmark:
-            oldpage_bkmk = str(entries[0].key())
-
-        num = len(entries)
-
-        if num==ENTRIES_PER_PAGE+1:
-            newpage_bkmk = str(entries[ENTRIES_PER_PAGE-1].key())
-        elif num<ENTRIES_PER_PAGE and num>0:
-            if no_reverse:
-                return (None,None,None)
-            else:
-                 e2,bk1,bk2 = Entry.get_old_page(tag,str(entries[0].key()),"<=",True)
-                 if e2 is not None:
-                     e            = e2
-                     oldpage_bkmk = bk1
-
-        if num>=ENTRIES_PER_PAGE:
-            e = entries[:ENTRIES_PER_PAGE]
-            e.reverse()
-
-        return (e,newpage_bkmk,oldpage_bkmk)
+        return Entry.get_page(False,tag,bookmark,operator,no_reverse)
 
     @classmethod
     def get(cls,entry_id):
