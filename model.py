@@ -15,6 +15,7 @@ class Tag(db.Model):
     Tags
     """
     name    = db.StringProperty (required=True)
+    normal  = db.StringProperty (required=True) #normalized name
     count   = db.IntegerProperty(required=True,default=0)
 
     @property

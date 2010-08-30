@@ -38,9 +38,9 @@ application = webapp.WSGIApplication(
    (r'/post/([0-9]+)/', PostEntry),
    (r'/post-new/'     , PostEntry),
    (r'/blog/([0-9]+)/', ShowEntry),
-   (r'/tag/([0-9a-zA-Z\-]+)/'                , TagIndex),
-   (r'/tag/([0-9a-zA-Z\-]+)/prev/([0-9a]+)/' , TagPrevPage),
-   (r'/tag/([0-9a-zA-Z\-]+)/next/([0-9a]+)/' , TagIndex),
+   (r'/tag/([0-9a-zA-Z\_]+)/'                , TagIndex),
+   (r'/tag/([0-9a-zA-Z\_]+)/prev/([0-9a]+)/' , TagPrevPage),
+   (r'/tag/([0-9a-zA-Z\_]+)/next/([0-9a]+)/' , TagIndex),
    (r'/.*'                    , NotFoundPageHandler)
   ],
   debug=True)

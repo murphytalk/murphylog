@@ -30,7 +30,7 @@ def update_tag_cloud_list():
     for t in e:
         count = t.count
         if count>0:
-            local_tag_list.append([str(t.key()),t.name,count])
+            local_tag_list.append([str(t.normal),t.name,count])
             sumv = sumv + count
 
     #average posts
@@ -112,15 +112,14 @@ class Index(MyRequestHandler):
     the root page
     """
     def do_get(self,tag,bkmk,get_old,get_page):
-        #get_my_tweets()
-        #logging.info(get_my_twitter_profile())
         try:
             if tag is None:
                 tagobj = None
             else:
                 q = db.Query(Tag)
-                q.filter('__key__ = ', db.Key(tag))
+                q.filter('normal = ', tag)
                 tagobj = q.get()
+                logging.debug('tag normal=%s:[%s]'%(tag,str(tagobj)))
 
             entries,next_bkmk,prev_bkmk = get_page(tagobj,bkmk)
         except datastore_errors.BadKeyError:

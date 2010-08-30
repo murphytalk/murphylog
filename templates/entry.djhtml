@@ -67,7 +67,7 @@ use custom tag if_show_private to determine wether to show content if entry is p
     {%trans "Tags :"%}
     {% for t in entry.get_tags %}
     <span title="{{t.name}}">
-      <a href="/tag/{{t.key}}/">{{t.name}}</a>&#32;
+      <a href="/tag/{{t.normal}}/">{{t.name}}</a>&#32;
     </span>
     {% endfor %}
 

@@ -57,6 +57,7 @@ class TagExporter(bulkloader.Exporter):
         bulkloader.Exporter.__init__(self,'Tag',
                                      [('__key__'  ,str,None),
                                       ('name'     ,str,None),
+                                      ('normal'   ,str,None),
                                       ('count'    ,str,None)])
 
 
@@ -92,7 +93,8 @@ class EntryImporter(bulkloader.Loader):
 class TagImporter(bulkloader.Loader):
     def __init__(self):
         bulkloader.Loader.__init__(self,'Tag',
-                                   [('name' ,str),
-                                    ('count',int)])
+                                   [('name'  ,str),
+                                    ('normal',str),
+                                    ('count' ,int)])
 
 loaders = [EntryImporter,TagImporter]
