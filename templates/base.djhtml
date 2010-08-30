@@ -65,9 +65,9 @@
 
       <h3 class="sidbar-title">{% trans "Tags"%}</h3>
       <div class="tag-cloud">
-	{% for t in tag_list %}
-	<span title="{{t.2}}({{t.3}} posts)">
-  	  <a class="tag" style="font-size: {{t.4}}%;" href="/tag/{{t.0}}/"> {{t.1}} </a>
+	{% for t in tag_cloud_list %}
+	<span title="{{t.1}}({{t.2}} posts)">
+  	  <a class="tag" style="font-size: {{t.3}}%;" href="/tag/{{t.0}}/"> {{t.1}} </a>
   	</span>
 	{% endfor %}
       </div>

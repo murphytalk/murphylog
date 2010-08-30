@@ -21,7 +21,7 @@ from google.appengine.ext             import webapp
 from google.appengine.ext.webapp      import template
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-import sys
+import sys,logging
 sys.path.insert(0, 'lib')
 sys.path.insert(0, 'lib/docutils.zip')
 
@@ -47,6 +47,7 @@ application = webapp.WSGIApplication(
 
 
 def main():
+  logging.getLogger().setLevel(logging.DEBUG)
   run_wsgi_app(application)
 
 

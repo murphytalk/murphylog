@@ -93,7 +93,7 @@ class Entry(db.Model):
         return self.last_edit.replace(tzinfo=UTC()).astimezone(MyTimeZone())
 
     @classmethod
-    def get_page(cls,get_older_page,tag,bookmark,operator,no_revers):
+    def get_page(cls,get_older_page,tag,bookmark,operator,no_reverse):
         if get_older_page:
             sort = 'DESC'
         else:
@@ -101,9 +101,11 @@ class Entry(db.Model):
 
         if bookmark:
             if tag is None:
+                #logging.debug('WHERE entry_id %s %s ORDER BY entry_id %s'%(operator,bookmark,sort))
                 q = Entry.gql('WHERE entry_id %s :1 ORDER BY entry_id %s'%(operator,sort), int(bookmark))
             else:
-                q = Entry.gql('WHERE tags = :1 AND entry_id %s :2 ORDER BY entry_id %s'%(operator,sort),tag,bookmark)
+                #logging.debug('WHERE tags = %s AND entry_id %s %s ORDER BY entry_id %s'%(str(tag.key()),operator,bookmark,sort))
+                q = Entry.gql('WHERE tags = :1 AND entry_id %s :2 ORDER BY entry_id %s'%(operator,sort),tag,int(bookmark))
         else:
             if tag is None:
                 q = Entry.gql('ORDER BY entry_id %s'%sort)
@@ -111,7 +113,6 @@ class Entry(db.Model):
                 q = Entry.gql('WHERE tags = :1 ORDER BY entry_id %s'%sort,tag)
 
         entries = q.fetch(ENTRIES_PER_PAGE+1)
-
         next_page_bkmk = prev_page_bkmk = None
 
         if bookmark:
@@ -142,6 +143,8 @@ class Entry(db.Model):
 
         if num>=ENTRIES_PER_PAGE:
             e = entries[:ENTRIES_PER_PAGE]
+        else:
+            e = entries
 
         if not get_older_page:
             e.reverse()

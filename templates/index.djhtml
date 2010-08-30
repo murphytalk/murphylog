@@ -11,19 +11,29 @@
         {%endcomment%}
         <h3 class="date">{{ group.grouper|break_weekday}}</h3>
         {% for entry in group.list %}
-	{% include "entry.djhtml" %}
-	{% endfor %}
+        {% include "entry.djhtml" %}
+        {% endfor %}
 
     {% endfor %}
 
 
     <div class="pager">
-    {% if new_page_bkmk %}
-    <a href="/prev/{{new_page_bkmk}}/"><< Newer posts</a>&nbsp;
-    {% endif %}
+    {% if tag %}
+        {% if new_page_bkmk %}
+            <a href="/tag/{{tag}}/prev/{{new_page_bkmk}}/"><< Newer posts</a>&nbsp;
+        {% endif %}
 
-    {% if old_page_bkmk %}
-    <a href="/next/{{old_page_bkmk}}/">Older posts >></a>&nbsp;
+        {% if old_page_bkmk %}
+            <a href="/tag/{{tag}}/next/{{old_page_bkmk}}/">Older posts >></a>&nbsp;
+        {% endif %}
+    {%else%}
+        {% if new_page_bkmk %}
+            <a href="/prev/{{new_page_bkmk}}/"><< Newer posts</a>&nbsp;
+        {% endif %}
+
+        {% if old_page_bkmk %}
+            <a href="/next/{{old_page_bkmk}}/">Older posts >></a>&nbsp;
+        {% endif %}
     {% endif %}
     </div>
 

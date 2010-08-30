@@ -21,6 +21,17 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: Entry
+  properties:
+  - name: tags
+  - name: entry_id
+
+- kind: Entry
+  properties:
+  - name: tags
+  - name: entry_id
+    direction: desc
+
 - kind: Tag
   properties:
   - name: __key__

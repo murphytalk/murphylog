@@ -17,7 +17,41 @@ import logging
 
 from django.conf import settings
 
-USERFILE="users.txt"
+USERFILE = "users.txt"
+TAG_MAX  = 100
+
+def update_tag_cloud_list():
+    sumv = 0
+    tags = Tag.gql('ORDER BY name ASC')
+    e    = tags.fetch(TAG_MAX)
+
+    local_tag_list = []
+
+    for t in e:
+        count = t.count
+        if count>0:
+            local_tag_list.append([str(t.key()),t.name,count])
+            sumv = sumv + count
+
+    #average posts
+    tags_count=len(e)
+    if tags_count > 0 and sumv> tags_count:
+        avg = sumv / tags_count
+    else:
+        avg = 1
+
+    #set font size
+    for t in local_tag_list:
+        font_size = 100*t[2]/avg
+        if font_size >200:
+            font_size = 200
+        elif font_size < 90:
+            font_size = 90
+
+        t.append(font_size) #t[3]
+    return local_tag_list
+
+
 
 class MyRequestHandler(webapp.RequestHandler):
     """
@@ -103,10 +137,12 @@ class Index(MyRequestHandler):
             user_url = users.create_login_url(self.request.uri)
 
         template_values = {
-            'entries'       : entries,
-            'user_url'      : user_url,
-            'user'          : user,
-            'is_view'       : True,
+            'entries'        : entries,
+            'user_url'       : user_url,
+            'user'           : user,
+            'tag'            : tag,
+            'is_view'        : True,
+            'tag_cloud_list' : update_tag_cloud_list()
         }
 
         if get_old:
@@ -115,6 +151,7 @@ class Index(MyRequestHandler):
         else:
             template_values['new_page_bkmk'] = next_bkmk
             template_values['old_page_bkmk'] = prev_bkmk
+
 
         self.render_template('index.djhtml',template_values)
 
@@ -234,7 +271,14 @@ class PostEntry(MyRequestHandler):
                 return
         else:
             #new
-            entry = Entry()
+            #find out current max entry id
+            q = Entry.gql('ORDER BY entry_id DESC')
+            e = q.fetch(1)
+            if e is None:
+                eid = 1
+            else:
+                eid = e[0].entry_id +1
+            entry = Entry(entry_id=eid)
 
         get_contents(entry,self.request)
         entry.put()
