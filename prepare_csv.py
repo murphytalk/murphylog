@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """
 prepare csv for GAE from django_db dump files
 3 inputs:
@@ -7,7 +8,7 @@ prepare csv for GAE from django_db dump files
 """
 import csv
 
-TAGS_F ="tags.csv"
+TAGS_F ="tags.out.csv"
 ENTRY_F="/Users/murphytalk/leadmain/home/temp/entry.csv" # tab seprated
 R_F    ="/Users/murphytalk/leadmain/home/temp/r.csv"
 

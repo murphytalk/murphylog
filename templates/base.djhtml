@@ -49,17 +49,6 @@
       <span id = "powered-by">
         <a href="http://www.twitter.com/murphytalk"><img src="/static/img/twitter_follow_me.png" alt="Follow murphytalk on Twitter"/></a>
       </span>
-{%comment%}
-      http://www-open-opensocial.googleusercontent.com/gadgets/ifr?v=fdb2b406636e1f3cff1c5d7e660f59eb&container=open&nocache=0&debug=0&view=home&lang=all&url=http%3A%2F%2Fcode.google.com%2Fappengine%2Freddit_gadget.xml&country=ALL&source=http%3A%2F%2Fcode.google.com%2Fappengine%2F&parent=http%3A%2F%2Fcode.google.com%2Fappengine%2F&libs=core%3Acore.io%3Arpc#rpctoken=245746489
-
-      <div style="font-family: verdana,arial,helvetica,sans-serif; background-color: rgb(255, 255, 255); border: 1px solid rgb(51, 102, 153);">
-        <div class="twitter-header" style="padding: 5px 5px 1px; background-color: rgb(206, 227, 248);">
-          <h4 class="twitter-title" style="margin: 0pt; padding-bottom: 3px;">
-            My Twitter account <a href="http://www.twitter.com/murphytalk" style="text-decoration: none; color: rgb(51, 102, 153);">@murphytalk</a>
-          </h4>
-        </div>
-      </div>
-{%endcomment%}
 
       <p>
 
@@ -71,20 +60,6 @@
   	</span>
 	{% endfor %}
       </div>
-
-      <p>
-
-
-      <h3>{% trans "Comments"%}</h3>
-      <ul>
-	{% for comment in comments %}
-	<li>
-	     <span title="{% blocktrans with comment.person_name as pname and comment.submit_date|date:"Y-m-d H:i:s" as pdate %}Commented by {{pname}} on {{pdate}} {% endblocktrans %}">
-	     <a href="/{{comment.object_id}}">{{ comment.comment|escape|urlizetrunc:"40" }}</a></span>
-  	</li>
-	{% endfor %}
-      </ul>
-
 
 <!--Powered by -->
       <span id = "powered-by">
@@ -114,6 +89,18 @@
 	  <label for="id_password"> Password: </label> <input name="password" id="id_password" type="password" onKeyPress="sumbit_form_by_enter_key(event)">
 	</form>
       {% endif %}
+
+      <p>
+
+      <h3>{% trans "Archives"%}</h3>
+      <ul>
+	{% for a in archives %}
+	<li>
+	     <a href="/archive/{{a.entry_id}}/">{{a.date}}</a> ({{a.count}})
+  	</li>
+	{% endfor %}
+      </ul>
+
 
 
     </div>  {%comment%} sidebar   {%endcomment%}

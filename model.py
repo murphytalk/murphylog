@@ -10,6 +10,14 @@ import datetime
 
 ENTRIES_PER_PAGE = 10
 
+class Archive(db.Model):
+    """
+    archives
+    """
+    date      = db.StringProperty(required=True)  #YYYY-MM
+    count     = db.IntegerProperty(required=True,default=0)
+    entry_id  = db.IntegerProperty(required=True) #entry id of the newest entry in the given date
+
 class Tag(db.Model):
     """
     Tags
@@ -172,6 +180,10 @@ class Entry(db.Model):
         returns a pair of (results,newpage_bkmk,oldpage_bkmk)
         """
         return Entry.get_page(False,tag,bookmark,operator,no_reverse)
+
+    @classmethod
+    def get_archive_next_page(cls,tag,bookmark,operator = "<=" ,no_reverse=False):
+        return Entry.get_page(True,None,bookmark,operator,no_reverse)
 
     @classmethod
     def get(cls,entry_id):

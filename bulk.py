@@ -97,4 +97,11 @@ class TagImporter(bulkloader.Loader):
                                     ('normal',str),
                                     ('count' ,int)])
 
-loaders = [EntryImporter,TagImporter]
+class ArchiveImporter(bulkloader.Loader):
+    def __init__(self):
+        bulkloader.Loader.__init__(self,'Archive',
+                                   [('date'    ,str),
+                                    ('count'   ,int),
+                                    ('entry_id',int)])
+
+loaders = [EntryImporter,TagImporter,ArchiveImporter]

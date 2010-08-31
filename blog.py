@@ -135,12 +135,19 @@ class Index(MyRequestHandler):
         else:
             user_url = users.create_login_url(self.request.uri)
 
+        q = Archive.gql("ORDER BY date DESC")
+        e = q.fetch(200) #TODO: user curosor
+        archives = []
+        for a in e:
+            archives.append(a) #(YYYY-MM,count,newest entry id)
+
         template_values = {
             'entries'        : entries,
             'user_url'       : user_url,
             'user'           : user,
             'tag'            : tag,
             'is_view'        : True,
+            'archives'       : archives,
             'tag_cloud_list' : update_tag_cloud_list()
         }
 
@@ -156,6 +163,10 @@ class Index(MyRequestHandler):
 
     def get(self,new_page_bookmark=None):
         self.do_get(None,new_page_bookmark,True,Entry.get_old_page)
+
+class ArchivePage(Index):
+    def get(self,bookmark=None):
+        self.do_get(None,bookmark,True,Entry.get_archive_next_page)
 
 class PrevPage(Index):
     def get(self,bookmark=None):
