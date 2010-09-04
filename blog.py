@@ -135,19 +135,13 @@ class Index(MyRequestHandler):
         else:
             user_url = users.create_login_url(self.request.uri)
 
-        q = Archive.gql("ORDER BY date DESC")
-        e = q.fetch(200) #TODO: user curosor
-        archives = []
-        for a in e:
-            archives.append(a) #(YYYY-MM,count,newest entry id)
-
         template_values = {
             'entries'        : entries,
             'user_url'       : user_url,
             'user'           : user,
             'tag'            : tag,
             'is_view'        : True,
-            'archives'       : archives,
+            'archives'       : Archive.get_archives(),
             'tag_cloud_list' : update_tag_cloud_list()
         }
 
@@ -222,6 +216,8 @@ class UpdateEntry(MyRequestHandler):
             'entry'    : entry,
             'format'   : format,
             'user_url' : users.create_logout_url(self.request.uri),
+            'tag_cloud_list' : update_tag_cloud_list(),
+            'archives'       : Archive.get_archives(),
         }
         self.render_template('update_entry.djhtml',template_values)
 
@@ -289,6 +285,8 @@ class PostEntry(MyRequestHandler):
             else:
                 eid = e[0].entry_id +1
             entry = Entry(entry_id=eid)
+            #update archive
+            Archive.update(eid)
 
         get_contents(entry,self.request)
         entry.put()

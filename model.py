@@ -10,6 +10,19 @@ import datetime
 
 ENTRIES_PER_PAGE = 10
 
+MONTHS = ('January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'Augest',
+          'September',
+          'Octobor',
+          'November',
+          'December')
+
 class Archive(db.Model):
     """
     archives
@@ -17,6 +30,45 @@ class Archive(db.Model):
     date      = db.StringProperty(required=True)  #YYYY-MM
     count     = db.IntegerProperty(required=True,default=0)
     entry_id  = db.IntegerProperty(required=True) #entry id of the newest entry in the given date
+
+    def get_date(self):
+        return "%s %s"%(MONTHS[int(self.date[5:7])-1],self.date[0:4])
+
+    @classmethod
+    def get_archives(cls):
+        q = Archive.gql("ORDER BY date DESC")
+        cursor = None
+        archives = []
+        while True:
+            if cursor is not None:
+                q.with_cursor(cursor)
+            e = q.fetch(100)
+            if (e is None) or len(e)==0:
+                break
+            else:
+                for a in e:
+                    archives.append(a) #(YYYY-MM,count,newest entry id)
+            cursor = q.cursor()
+        return archives
+
+    @classmethod
+    def update(cls,entry_id,date=None):
+        """
+        add an entry in date(today if None),update the coresponding archive record
+        """
+        if date is None:
+            date = datetime.date.today()
+        ds   = "%04d-%02d"%(date.year,date.month)
+        q = Archive.gql('WHERE date = :1',ds)
+        e = q.fetch(1)
+        if (e is None) or len(e) == 0 :
+            #new
+            d = Archive(date=ds,count=1,entry_id=entry_id)
+        else:
+            d = e[0]
+            d.count+=1
+            d.entry_id = entry_id
+        d.put()
 
 class Tag(db.Model):
     """
@@ -34,7 +86,8 @@ class Tag(db.Model):
     def get(cls,key):
         q = db.Query(Tag)
         q.filter('__key__ = ',key)
-        return q.get()
+        obj = q.get()
+        return obj
 
 ZERO  = datetime.timedelta(0)
 TOKYO = datetime.timedelta(hours=9)
@@ -102,7 +155,7 @@ class Entry(db.Model):
         return self.last_edit.replace(tzinfo=UTC()).astimezone(MyTimeZone())
 
     @classmethod
-    def get_page(cls,get_older_page,tag,bookmark,operator,no_reverse):
+    def get_page(cls,get_older_page,tag,bookmark,operator):
         if get_older_page:
             sort = 'DESC'
         else:
@@ -133,22 +186,6 @@ class Entry(db.Model):
 
         if num == ENTRIES_PER_PAGE+1:
             next_page_bkmk=str(entries[ENTRIES_PER_PAGE-1].entry_id)
-        elif num<ENTRIES_PER_PAGE and num > 0:
-            if no_reverse:
-                return (None,None,None)
-            else:
-                #less than ENTRIES_PER_PAGE entries left on next page
-                #we use the last entry to seek back untill we have  ENTRIES_PER_PAGE entries
-                #need to set the 3rd parameter no_reverse to True
-                #otherwise there will be a infinite recursion if the total num is less than ENTRIES_PER_PAGE
-                if get_older_page:
-                    op = ">=" #we need to include the last entry so need = here
-                else:
-                    op = "<="
-                e,bk1,bk2 = Entry.get_page(not get_older_page,tag,str(entries[-1].entry_id),op,True)
-                if e is not None:
-                    entries      = e
-                    newpage_bkmk = bk1
 
         if num>=ENTRIES_PER_PAGE:
             e = entries[:ENTRIES_PER_PAGE]
@@ -162,28 +199,28 @@ class Entry(db.Model):
 
 
     @classmethod
-    def get_old_page(cls,tag,bookmark,operator = "<", no_reverse = False):
+    def get_old_page(cls,tag,bookmark,operator = "<"):
         """
         get next page of entries
         if bookmark has not been set then get from the latest entry
 
         returns a pair of (results,oldpage_bkmk,newpage_bkmk)
         """
-        return Entry.get_page(True,tag,bookmark,operator,no_reverse)
+        return Entry.get_page(True,tag,bookmark,operator)
 
     @classmethod
-    def get_new_page(cls,tag,bookmark,operator='>',no_reverse=False):
+    def get_new_page(cls,tag,bookmark,operator='>'):
         """
         get previous page of entries
         if bookmark has not been set then get from the latest entry
 
         returns a pair of (results,newpage_bkmk,oldpage_bkmk)
         """
-        return Entry.get_page(False,tag,bookmark,operator,no_reverse)
+        return Entry.get_page(False,tag,bookmark,operator)
 
     @classmethod
-    def get_archive_next_page(cls,tag,bookmark,operator = "<=" ,no_reverse=False):
-        return Entry.get_page(True,None,bookmark,operator,no_reverse)
+    def get_archive_next_page(cls,tag,bookmark,operator = "<="):
+        return Entry.get_page(True,None,bookmark,operator)
 
     @classmethod
     def get(cls,entry_id):

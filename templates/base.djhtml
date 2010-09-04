@@ -92,11 +92,11 @@
 
       <p>
 
-      <h3>{% trans "Archives"%}</h3>
+      <h3 class="sidebar-title">{% trans "Archives"%}</h3>
       <ul>
 	{% for a in archives %}
 	<li>
-	     <a href="/archive/{{a.entry_id}}/">{{a.date}}</a> ({{a.count}})
+	     <a href="/archive/{{a.entry_id}}/">{{a.get_date}}</a> ({{a.count}})
   	</li>
 	{% endfor %}
       </ul>
