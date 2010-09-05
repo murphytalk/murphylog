@@ -323,7 +323,9 @@ class ShowEntry(MyRequestHandler):
                 'user'      : user,
                 'highlight_keyword' : None,
                 'is_view'    : True,
-                'show_detail': True
+                'show_detail': True,
+                'archives'       : Archive.get_archives(),
+                'tag_cloud_list' : update_tag_cloud_list(),
                 }
         self.render_template('detail.djhtml',template_values)
 
