@@ -10,21 +10,21 @@
   margin-top:0;
   padding-bottom:8px;
   padding-left:0;
-  padding-left:155px;/*width of left column containing the label elements*/
+  padding-left:55px;/*width of left column containing the label elements*/
   padding-right:0;
   padding-top:5px;
-  width:300px;
+  width:800px;
 }
 .cssform label {
   float:left;
   font-weight:bold;
-  margin-left:-155px;/*width of left column*/
-  width:150px;/*width of labels. Should be smaller than left column (155px) to create some right margin*/
+  margin-left:-55px;/*width of left column*/
+  width:50px;/*width of labels. Should be smaller than left column (155px) to create some right margin*/
 }
 .cssform input[type="text"] {/*width of text boxes. IE6 does not understand this attribute*/
-  width:180px;
+  width:800px;
 }
 .cssform textarea {
   height:150px;
-  width:250px;
+  width:800px;
 }

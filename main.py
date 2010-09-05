@@ -42,6 +42,7 @@ application = webapp.WSGIApplication(
    (r'/tag/([0-9a-zA-Z\_]+)/'                , TagIndex),
    (r'/tag/([0-9a-zA-Z\_]+)/prev/([0-9a]+)/' , TagPrevPage),
    (r'/tag/([0-9a-zA-Z\_]+)/next/([0-9a]+)/' , TagIndex),
+   (r'/feed.xml'              , AtomFeedHandler),
    (r'/.*'                    , NotFoundPageHandler)
   ],
   debug=True)

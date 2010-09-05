@@ -17,6 +17,12 @@ indexes:
 
 - kind: Entry
   properties:
+  - name: private
+  - name: entry_id
+    direction: desc
+
+- kind: Entry
+  properties:
   - name: tags
   - name: __key__
     direction: desc

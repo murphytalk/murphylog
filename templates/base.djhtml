@@ -24,7 +24,7 @@
   <div id="page">
     <div id="heading">
 	<span > &raquo; <a href="/">{% trans "Home" %}</a>
-	  ({% blocktrans with total_posts_num as pn%} {{pn}} posts {% endblocktrans %})
+	  ({% blocktrans with archives.1 as pn%} {{pn}} posts {% endblocktrans %})
 
 	  {% if user %}
              {% if  is_view %}
@@ -60,7 +60,15 @@
   	</span>
 	{% endfor %}
       </div>
-
+      <p>
+      <h3>{% trans "Feed" %}</h3>
+      <span id = "feed">
+      <ul >
+        <li>
+          <img src="/static/img/rss.png" alt="RSS Feed"/>  <a href="/feed.xml">RSS Feed</a>
+        </li>
+      </ul>
+      </span>
 <!--Powered by -->
       <span id = "powered-by">
       <p>
@@ -82,19 +90,11 @@
         <img src="/static/img/gmail.png" alt="mail" border="0" title="mail">
       </span>
 
-      {% if user.is_anonymous %}
-        <script type="text/javascript" src="/static/js/form.js"></script>
-        <form action="/login/" method="post" id="login-form">
-	  <label for="id_username"> Username: </label> <input name="username" id="id_username" type="text" onKeyPress="sumbit_form_by_enter_key(event)">
-	  <label for="id_password"> Password: </label> <input name="password" id="id_password" type="password" onKeyPress="sumbit_form_by_enter_key(event)">
-	</form>
-      {% endif %}
-
       <p>
 
       <h3 class="sidebar-title">{% trans "Archives"%}</h3>
       <ul>
-	{% for a in archives %}
+	{% for a in archives.0 %}
 	<li>
 	     <a href="/archive/{{a.entry_id}}/">{{a.get_date}}</a> ({{a.count}})
   	</li>

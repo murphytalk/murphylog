@@ -24,6 +24,10 @@ body {
     text-align: left;
 }
 
+#feed {
+    vertical-align: middle;
+}
+
 #header {
     height:  60px;
     margin:  0 0 5px;

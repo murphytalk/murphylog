@@ -6,6 +6,7 @@ from google.appengine.ext        import webapp
 from google.appengine.ext.webapp import template
 from google.appengine.api        import users
 from google.appengine.api        import datastore_errors
+from google.appengine.api        import memcache
 
 #from mytwitter import get_my_tweets,get_my_twitter_profile
 
@@ -14,6 +15,7 @@ from defs   import *
 
 import functools
 import logging
+import datetime
 
 from django.conf import settings
 
@@ -75,7 +77,7 @@ class MyRequestHandler(webapp.RequestHandler):
                             TEMPLATE_SUBDIR,
                             template_name)
 
-    def render_template(self, template_name, template_vars):
+    def render_template(self, template_name, template_vars,write_out = True):
         """
         Render a template and write the output to ``self.response.out``.
 
@@ -88,7 +90,11 @@ class MyRequestHandler(webapp.RequestHandler):
                 Can be empty.
         """
         template_path = self.get_template(template_name)
-        self.response.out.write(template.render(template_path, template_vars))
+        output        = template.render(template_path, template_vars)
+        if write_out:
+            self.response.out.write(output)
+        else:
+            return output
 
 
 class NotFoundPageHandler(MyRequestHandler):
@@ -111,7 +117,7 @@ class Index(MyRequestHandler):
     """
     the root page
     """
-    def do_get(self,tag,bkmk,get_old,get_page):
+    def do_get(self,tag,bkmk,get_old,get_page,template='index.djhtml'):
         try:
             if tag is None:
                 tagobj = None
@@ -140,9 +146,10 @@ class Index(MyRequestHandler):
             'user_url'       : user_url,
             'user'           : user,
             'tag'            : tag,
+            'tagobj'         : tagobj,
             'is_view'        : True,
             'archives'       : Archive.get_archives(),
-            'tag_cloud_list' : update_tag_cloud_list()
+            'tag_cloud_list' : update_tag_cloud_list(),
         }
 
         if get_old:
@@ -153,7 +160,7 @@ class Index(MyRequestHandler):
             template_values['old_page_bkmk'] = prev_bkmk
 
 
-        self.render_template('index.djhtml',template_values)
+        self.render_template(template,template_values)
 
     def get(self,new_page_bookmark=None):
         self.do_get(None,new_page_bookmark,True,Entry.get_old_page)
@@ -168,11 +175,11 @@ class PrevPage(Index):
 
 class TagIndex(Index):
     def get(self,tag,bookmark=None):
-        self.do_get(tag,bookmark,True,Entry.get_old_page)
+        self.do_get(tag,bookmark,True,Entry.get_old_page,'taggedIndex.djhtml')
 
 class TagPrevPage(Index):
     def get(self,tag,bookmark=None):
-        self.do_get(tag,bookmark,False,Entry.get_new_page)
+        self.do_get(tag,bookmark,False,Entry.get_new_page,'taggedIndex.djhtml')
 
 
 def logged_in_as_owner(method):
@@ -245,8 +252,7 @@ class PostEntry(MyRequestHandler):
                 q = Tag.gql('WHERE name = :1',t)
                 tag = q.get()
                 if tag is None:
-                    tag = Tag(name=t)
-                    tag.put()
+                    tag = Tag.new(t)
                 tags.append(tag)
 
             tag_keys = [ i.key() for i in tags ]
@@ -272,6 +278,7 @@ class PostEntry(MyRequestHandler):
             #update
             try:
                 entry = Entry.get(eid)
+                entry.last_edit = datetime.datetime.now()
             except datastore_errors.BadKeyError:
                 self.render_template('404.djhtml',None)
                 return
@@ -319,3 +326,16 @@ class ShowEntry(MyRequestHandler):
                 'show_detail': True
                 }
         self.render_template('detail.djhtml',template_values)
+
+class AtomFeedHandler(MyRequestHandler):
+  def get(self):
+    output = memcache.get('feed_output')
+    if output is None:
+        entries = Entry.gql("WHERE private = FALSE ORDER BY entry_id DESC LIMIT 100")
+        template_values = {'entries'     : entries,
+                           'site_domain' : 'murphytalk-log.appspot.com'
+                           }
+        output = self.render_template('feed.djhtml',template_values,False)
+        memcache.set('feed_output', output, 86400)
+    self.response.headers['Content-type'] = 'text/xml; charset=UTF-8'
+    self.response.out.write(output)

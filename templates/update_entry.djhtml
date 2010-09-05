@@ -23,7 +23,7 @@
   </p>
 
   <p>
-  <label>Text type</label>
+  <label>Type</label>
    <input type="radio" name="texttype" value="rs" {% ifequal format "rs" %} checked {% endifequal %}/> reStructureText
    <input type="radio" name="texttype" value="st" {% ifequal format "st" %} checked {% endifequal %}/> StructureText
    <input type="radio" name="texttype" value="bb" {% ifequal format "bb" %} checked {% endifequal %}/> BBCode

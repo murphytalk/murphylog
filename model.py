@@ -5,6 +5,7 @@ its code is at http://github.com/bmc/picoblog
 """
 
 from google.appengine.ext import db
+from utils import normalize_title
 import logging
 import datetime
 
@@ -39,6 +40,7 @@ class Archive(db.Model):
         q = Archive.gql("ORDER BY date DESC")
         cursor = None
         archives = []
+        count = 0
         while True:
             if cursor is not None:
                 q.with_cursor(cursor)
@@ -48,8 +50,9 @@ class Archive(db.Model):
             else:
                 for a in e:
                     archives.append(a) #(YYYY-MM,count,newest entry id)
+                    count+=a.count
             cursor = q.cursor()
-        return archives
+        return (archives,count)
 
     @classmethod
     def update(cls,entry_id,date=None):
@@ -81,6 +84,12 @@ class Tag(db.Model):
     @property
     def entries(self):
         return Entry.gql("WHERE tags = :1", self.key())
+
+    @classmethod
+    def new(cls,name):
+        tag = Tag(name=name,normal=normalize_title(name))
+        tag.put()
+        return tag
 
     @classmethod
     def get(cls,key):

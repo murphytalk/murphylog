@@ -1,13 +1,7 @@
-{% extends "blog/index.djhtml" %}
+{% extends "index.djhtml" %}
 {% load i18n %}
-{% load murphymarkup%}
 {% block taginfo%}
-<h3>{{tag_name}}
-{% if tag_note %}
-{% ifnotequal tag_name tag_note %}
-  - {{tag_note}}
-{% endifnotequal%}
-{% endif %}
-:&nbsp; {% blocktrans with hits as hit%} {{hit}} posts {% endblocktrans %}
+<h3>{{tagobj.name}}
+:&nbsp; {% blocktrans with tagobj.count as hit%} {{hit}} posts {% endblocktrans %}
 </h2>
 {% endblock %}
