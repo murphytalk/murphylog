@@ -28,8 +28,8 @@ handlers:
 - url: /static
   static_dir: static
 
-- url: /feed
-  script: feed.py
+- url: /blogimages
+  static_dir: blogimages
 
 - url: .*
   script: main.py
