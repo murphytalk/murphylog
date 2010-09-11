@@ -11,6 +11,29 @@ import datetime
 
 ENTRIES_PER_PAGE = 10
 
+ZERO  = datetime.timedelta(0)
+TOKYO = datetime.timedelta(hours=9)
+
+class UTC(datetime.tzinfo):
+    """UTC"""
+    def utcoffset(self, dt):
+        return ZERO
+
+    def tzname(self, dt):
+        return "UTC"
+
+    def dst(self, dt):
+        return ZERO
+
+class MyTimeZone(datetime.tzinfo):
+    def utcoffset(self, dt):
+        return TOKYO
+    def dst(self, dt):
+        return ZERO
+    def tzname(self, dt):
+        return "GMT+9"
+
+
 MONTHS = ('January',
           'February',
           'March',
@@ -60,7 +83,8 @@ class Archive(db.Model):
         add an entry in date(today if None),update the coresponding archive record
         """
         if date is None:
-            date = datetime.date.today()
+            date = datetime.datetime.now().replace(tzinfo=UTC()).astimezone(MyTimeZone()).date()
+
         ds   = "%04d-%02d"%(date.year,date.month)
         q = Archive.gql('WHERE date = :1',ds)
         e = q.fetch(1)
@@ -97,29 +121,6 @@ class Tag(db.Model):
         q.filter('__key__ = ',key)
         obj = q.get()
         return obj
-
-ZERO  = datetime.timedelta(0)
-TOKYO = datetime.timedelta(hours=9)
-
-class UTC(datetime.tzinfo):
-    """UTC"""
-    def utcoffset(self, dt):
-        return ZERO
-
-    def tzname(self, dt):
-        return "UTC"
-
-    def dst(self, dt):
-        return ZERO
-
-class MyTimeZone(datetime.tzinfo):
-    def utcoffset(self, dt):
-        return TOKYO
-    def dst(self, dt):
-        return ZERO
-    def tzname(self, dt):
-        return "GMT+9"
-
 
 class Entry(db.Model):
     """

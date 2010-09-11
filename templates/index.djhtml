@@ -4,7 +4,7 @@
 {% block content %}
 
 {% if entries %}
-    {% regroup entries by post_time|date:"l,Y-m-d" as grouped %}
+    {% regroup entries by get_post_time|date:"l,Y-m-d" as grouped %}
     {% for group in grouped %}
         {%comment%}
         break_weekday -> 替换Sunday,YYYY-MM-DD为Sunday<BR>YYYY-MM-DD
