@@ -28,14 +28,4 @@
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=murpytalk-log">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
 
-<script type="text/javascript">
-var disqus_shortname = 'murpytalk-log';
-(function () {
-  var s = document.createElement('script'); s.async = true;
-  s.src = 'http://disqus.com/forums/murpytalk-log/count.js';
-  (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-}());
-</script>
-
-
 {% endblock %}

@@ -62,6 +62,7 @@ use custom tag if_show_private to determine wether to show content if entry is p
     {% if entry.private %}
       | {%trans "This is a <font color=red>private</font> post"%}
     {% endif %}
+    | <a href="/blog/{{entry.entry_id}}/#disqus_thread"></a>
     <br>
     &bull;
     {%trans "Tags :"%}
