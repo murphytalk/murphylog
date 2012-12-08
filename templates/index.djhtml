@@ -10,7 +10,9 @@
         break_weekday -> 替换Sunday,YYYY-MM-DD为Sunday<BR>YYYY-MM-DD
         {%endcomment%}
         <h3 class="date">{{ group.grouper|break_weekday}}</h3>
+        {{group}}
         {% for entry in group.list %}
+        entry is {{entry}}
         {% include "entry.djhtml" %}
         {% endfor %}
 

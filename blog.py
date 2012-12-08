@@ -2,7 +2,7 @@
 # coding=utf-8
 import os.path
 
-from google.appengine.ext        import webapp
+import webapp2 as webapp
 from google.appengine.ext.webapp import template
 from google.appengine.api        import users
 from google.appengine.api        import datastore_errors
@@ -17,9 +17,10 @@ import functools
 import logging
 import datetime
 
-from django.conf import settings
+from users import is_valid_user
 
-USERFILE = "users.txt"
+#from django.conf import settings
+
 TAG_MAX  = 100
 
 def update_tag_cloud_list():
@@ -102,16 +103,6 @@ class NotFoundPageHandler(MyRequestHandler):
         #self.error(404)
         self.render_template('404.djhtml',None)
 
-def is_valid_user(user):
-    emails = open(USERFILE).readlines()
-    for e in emails:
-        if e[0]=='#':
-            continue
-        if e[-1]=='\n' or e[-1]=='\r':
-            e = e[0:-1]
-        if user.email()==e:
-            return True
-    return False
 
 class Index(MyRequestHandler):
     """
@@ -287,9 +278,10 @@ class PostEntry(MyRequestHandler):
             #find out current max entry id
             q = Entry.gql('ORDER BY entry_id DESC')
             e = q.fetch(1)
-            if e is None:
+            if (e is None) or len(e)==0:
                 eid = 1
             else:
+                #logging.info("e is %s"%e)
                 eid = e[0].entry_id +1
             entry = Entry(entry_id=eid)
             #update archive

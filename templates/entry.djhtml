@@ -9,6 +9,8 @@ use custom tag if_show_private to determine wether to show content if entry is p
 
 {% load i18n %}
 
+passed in entry is {{entry}}
+
 <div class="atomentry">
 
   <h4 class="title">

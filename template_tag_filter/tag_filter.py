@@ -11,10 +11,13 @@ import defs
 from google.appengine.ext import webapp
 register = webapp.template.create_template_register()
 
+import logging
+
 #----------------------------------------------------------------------------------
 # custom tag
 class IfShowPrivateNode(Node):
     def __init__(self, entry, user, nodelist_true, nodelist_false, negate):
+        logging.info("entry obj.owernew=%s,user obj.user_id=%s",entry.owner,user.user_id)
         self.entry, self.user = entry, user
         self.nodelist_true, self.nodelist_false = nodelist_true, nodelist_false
         self.negate = negate
