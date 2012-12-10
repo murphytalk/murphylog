@@ -47,7 +47,8 @@
 <!-- the page sidebar -->
     <div id="sidebar">
       <span id = "powered-by">
-        <a href="http://www.twitter.com/murphytalk"><img src="/static/img/twitter_follow_me.png" alt="Follow murphytalk on Twitter"/></a>
+        <a href="http://www.twitter.
+        3com/murphytalk"><img src="/static/img/twitter_follow_me.png" alt="Follow murphytalk on Twitter"/></a>
       </span>
 
       <p>

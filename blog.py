@@ -3,10 +3,10 @@
 import os.path
 
 import webapp2 as webapp
-from google.appengine.ext.webapp import template
-from google.appengine.api        import users
-from google.appengine.api        import datastore_errors
-from google.appengine.api        import memcache
+from mako.lookup           import TemplateLookup
+from google.appengine.api  import users
+from google.appengine.api  import datastore_errors
+from google.appengine.api  import memcache
 
 #from mytwitter import get_my_tweets,get_my_twitter_profile
 
@@ -62,21 +62,15 @@ class MyRequestHandler(webapp.RequestHandler):
     serves primarily to isolate common logic.
     """
 
-    def get_template(self, template_name):
+    def get_template_path(self):
         """
-        Return the full path of the template.
-
-        :Parameters:
-            template_name : str
-                Simple name of the template
-
+        Return the full path of the template folder.
         :rtype: str
-        :return: the full path to the template. Does *not* ensure that the
+        :return: the full path to the template folder. Does *not* ensure that the
                  template exists.
         """
         return os.path.join(os.path.dirname(__file__),
-                            TEMPLATE_SUBDIR,
-                            template_name)
+                            TEMPLATE_SUBDIR)
 
     def render_template(self, template_name, template_vars,write_out = True):
         """
@@ -90,8 +84,9 @@ class MyRequestHandler(webapp.RequestHandler):
                 Dictionary of variables to make available to the template.
                 Can be empty.
         """
-        template_path = self.get_template(template_name)
-        output        = template.render(template_path, template_vars)
+        template_lookup = TemplateLookup(directories = [self.get_template_path()])
+        template        = template_lookup.get_template(template_name+".mako")
+        output          = template.render(template_vars)
         if write_out:
             self.response.out.write(output)
         else:
@@ -101,14 +96,14 @@ class MyRequestHandler(webapp.RequestHandler):
 class NotFoundPageHandler(MyRequestHandler):
     def get(self):
         #self.error(404)
-        self.render_template('404.djhtml',None)
+        self.render_template('404',None)
 
 
 class Index(MyRequestHandler):
     """
     the root page
     """
-    def do_get(self,tag,bkmk,get_old,get_page,template='index.djhtml'):
+    def do_get(self,tag,bkmk,get_old,get_page,template='index'):
         try:
             if tag is None:
                 tagobj = None
@@ -120,7 +115,7 @@ class Index(MyRequestHandler):
 
             entries,next_bkmk,prev_bkmk = get_page(tagobj,bkmk)
         except datastore_errors.BadKeyError:
-            self.render_template('404.djhtml',None)
+            self.render_template('404',None)
             return
 
         user  = users.get_current_user()
@@ -166,11 +161,11 @@ class PrevPage(Index):
 
 class TagIndex(Index):
     def get(self,tag,bookmark=None):
-        self.do_get(tag,bookmark,True,Entry.get_old_page,'taggedIndex.djhtml')
+        self.do_get(tag,bookmark,True,Entry.get_old_page,'taggedIndex')
 
 class TagPrevPage(Index):
     def get(self,tag,bookmark=None):
-        self.do_get(tag,bookmark,False,Entry.get_new_page,'taggedIndex.djhtml')
+        self.do_get(tag,bookmark,False,Entry.get_new_page,'taggedIndex')
 
 
 def logged_in_as_owner(method):
@@ -217,7 +212,7 @@ class UpdateEntry(MyRequestHandler):
             'tag_cloud_list' : update_tag_cloud_list(),
             'archives'       : Archive.get_archives(),
         }
-        self.render_template('update_entry.djhtml',template_values)
+        self.render_template('update_entry',template_values)
 
 class PostEntry(MyRequestHandler):
     """
@@ -271,7 +266,7 @@ class PostEntry(MyRequestHandler):
                 entry = Entry.get(eid)
                 entry.last_edit = datetime.datetime.now()
             except datastore_errors.BadKeyError:
-                self.render_template('404.djhtml',None)
+                self.render_template('404',None)
                 return
         else:
             #new
@@ -306,7 +301,7 @@ class ShowEntry(MyRequestHandler):
             try:
                 entry = Entry.get(eid)
             except datastore_errors.BadKeyError:
-                self.render_template('404.djhtml',None)
+                self.render_template('404',None)
                 return
 
             template_values = {
@@ -319,7 +314,7 @@ class ShowEntry(MyRequestHandler):
                 'archives'       : Archive.get_archives(),
                 'tag_cloud_list' : update_tag_cloud_list(),
                 }
-        self.render_template('detail.djhtml',template_values)
+        self.render_template('detail',template_values)
 
 class AtomFeedHandler(MyRequestHandler):
   def get(self):
@@ -329,7 +324,7 @@ class AtomFeedHandler(MyRequestHandler):
         template_values = {'entries'     : entries,
                            'site_domain' : 'murphytalk-log.appspot.com'
                            }
-        output = self.render_template('feed.djhtml',template_values,False)
+        output = self.render_template('feed',template_values,False)
         memcache.set('feed_output', output, 86400)
     self.response.headers['Content-type'] = 'text/xml; charset=UTF-8'
     self.response.out.write(output)

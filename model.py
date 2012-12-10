@@ -6,7 +6,7 @@ its code is at http://github.com/bmc/picoblog
 
 from google.appengine.ext import db
 from utils import normalize_title
-import logging
+#import logging
 import datetime
 
 ENTRIES_PER_PAGE = 10
@@ -80,7 +80,7 @@ class Archive(db.Model):
     @classmethod
     def update(cls,entry_id,date=None):
         """
-        add an entry in date(today if None),update the coresponding archive record
+        add an entry in date(today if None),update the corresponding archive record
         """
         if date is None:
             date = datetime.datetime.now().replace(tzinfo=UTC()).astimezone(MyTimeZone()).date()

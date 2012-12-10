@@ -4,7 +4,7 @@ from django.template import VariableDoesNotExist
 
 from TextType.stx import stx2html
 from BBCode.default import content2html
-from utils import processSmileys
+from myutils import processSmileys
 import enhanced_docutils #patch the docutils package
 
 import defs

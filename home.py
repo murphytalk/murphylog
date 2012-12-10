@@ -2,10 +2,11 @@ import sys,logging
 
 sys.path.insert(0, 'lib')
 sys.path.insert(0, 'lib/docutils.zip')
+sys.path.insert(0, 'lib/mako.zip')
+sys.path.insert(0, 'lib/BBCode.zip')
+sys.path.insert(0, 'lib/TextType.zip')
 
 from blog import *
-
-template.register_template_library('template_tag_filter.tag_filter')
 
 app = webapp.WSGIApplication(
     [(r'/'              , Index),
