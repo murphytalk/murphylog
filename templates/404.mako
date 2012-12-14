@@ -1,7 +1,6 @@
-{% load i18n %}
 <html>
 <head>
-<title>Murphytalk's Weblog - {% trans "Restricted Area" %}!</title>
+<title>Murphytalk's Weblog - Restricted Area!</title>
 <style type="text/css">
   .centeredImage{
     text-align:center;
@@ -16,7 +15,7 @@
 </style>
 </head>
 <body>
-  <p class="centeredImage"><img SRC="/static/img/404.gif"><br>{%trans "You are not supposed to be here,plase go back to" %}
-  &nbsp; <a href="/">{% trans "Home" %}</a> </p>
+  <p class="centeredImage"><img SRC="/static/img/404.gif"><br>You are not supposed to be here,please go back to
+  &nbsp; <a href="/">"Home"</a> </p>
 </body>
 </html>

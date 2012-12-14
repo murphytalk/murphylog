@@ -21,8 +21,9 @@ skip_files:
 - .*\.csv
 
 libraries:
-- name : django
+- name : markupsafe
   version : "latest"
+
 
 handlers:
 

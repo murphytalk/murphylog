@@ -14,12 +14,13 @@ from model  import *
 from defs   import *
 
 import functools
-import logging
 import datetime
 
 from users import is_valid_user
 
-#from django.conf import settings
+
+import logging
+DEBUG=True
 
 TAG_MAX  = 100
 
@@ -86,7 +87,18 @@ class MyRequestHandler(webapp.RequestHandler):
         """
         template_lookup = TemplateLookup(directories = [self.get_template_path()])
         template        = template_lookup.get_template(template_name+".mako")
-        output          = template.render(template_vars)
+
+        if DEBUG:
+            logging.info("loading template %s"%template_name)
+
+        if None == template_vars:
+            output = template.render()
+        else:
+            if DEBUG:
+                for k in template_vars.keys():
+                    logging.info("%s=%s"%(k,template_vars[k]))
+            output = template.render(**template_vars) #unpacking the dict
+
         if write_out:
             self.response.out.write(output)
         else:
