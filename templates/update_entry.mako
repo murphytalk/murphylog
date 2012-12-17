@@ -2,13 +2,13 @@
 
 <%block name="customizecss">
 <link rel="stylesheet" type="text/css" href="/static/theme/scribbish/form.css" />
-<%/block>
+</%block>
 
 ##==== body begins ====
 
 <form method="post" action=
 % if entry:
-      "/post/${$id}"
+      "/post/${id}"
 % else:
       "/post-new/"
 % endif
@@ -47,17 +47,17 @@ method="post" class="cssform" id="update-entry-form">
   <p>
   <label>Type</label>
    <input type="radio" name="texttype" value="rs" 
-          % if ${format} == "rs":
+          % if format == "rs":
              checked
           % endif
     /> reStructureText
    <input type="radio" name="texttype" value="st" 
-          % if ${format} == "st":
+          % if format == "st":
              checked
           % endif
     /> StructureText
    <input type="radio" name="texttype" value="bb" 
-          % if ${format} == "bb":
+          % if format == "bb":
              checked
           % endif
    /> BBCode
@@ -66,7 +66,7 @@ method="post" class="cssform" id="update-entry-form">
   <p>
   <label>Private</label>
   <input type="checkbox" name="private" value="private"
-         % if entry.privte:
+         % if entry and  entry.private:
              checked
          % endif
   />
@@ -75,7 +75,7 @@ method="post" class="cssform" id="update-entry-form">
   <p>
   <label>Tags</label>
   <input type="text" name="tags" value=
-         % if entry.tags:
+         % if entry and entry.tags:
           "${entry.get_tags_as_str}"
          % else:
            ""

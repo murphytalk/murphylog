@@ -25,12 +25,12 @@
   </h4>
 
   % if show_private(entry,logged_in_user):
-      ${entry.subject | render_markup_text(entry.text_type)}
+      ${entry.subject | render_markup_text(entry.format)}
 
       % if show_detail:
          % if entry.text:
 	   ―
-           ${entry.text | render_markup_text(entry.text_type)}
+           ${entry.text | render_markup_text(entry.format)}
          % endif
       % elif entry.text:
          &nbsp; &nbsp; &bull;&nbsp;<a href="/blog/${entry.entry_id}">Read more &raquo;</a><p>

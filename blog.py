@@ -4,6 +4,7 @@ import os.path
 
 import webapp2 as webapp
 from mako.lookup           import TemplateLookup
+from mako                  import exceptions
 from google.appengine.api  import users
 from google.appengine.api  import datastore_errors
 from google.appengine.api  import memcache
@@ -85,25 +86,29 @@ class MyRequestHandler(webapp.RequestHandler):
                 Dictionary of variables to make available to the template.
                 Can be empty.
         """
-        template_lookup = TemplateLookup(directories = [self.get_template_path()])
-        template        = template_lookup.get_template(template_name+".mako")
+        try:
+            template_lookup = TemplateLookup(directories = [self.get_template_path()])
+            template        = template_lookup.get_template(template_name+".mako")
 
-        if DEBUG:
-            logging.info("loading template %s"%template_name)
-
-        if None == template_vars:
-            output = template.render()
-        else:
             if DEBUG:
-                for k in template_vars.keys():
-                    logging.info("%s=%s"%(k,template_vars[k]))
-            output = template.render(**template_vars) #unpacking the dict
+                logging.info("loading template %s"%template_name)
+                
+            if None == template_vars:
+                output = template.render()
+            else:
+                if DEBUG:
+                    for k in template_vars.keys():
+                        logging.info("%s=%s"%(k,template_vars[k]))
+                        
+                        output = template.render(**template_vars) #unpacking the dict
 
-        if write_out:
-            self.response.out.write(output)
-        else:
-            return output
-
+            if write_out:
+                self.response.out.write(output)
+            else:
+                return output
+        except:
+            self.response.out.write(exceptions.text_error_template().render())
+        
 
 class NotFoundPageHandler(MyRequestHandler):
     def get(self):
