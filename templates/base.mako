@@ -129,7 +129,7 @@
       <ul>
 	% for a in archives[0]:
     	  <li>
-	     <a href="/archive/${a.entry_id}/">${a.get_date}</a> (${a.count})
+	     <a href="/archive/${a.entry_id}/">${a.get_date()}</a> (${a.count})
   	  </li>
 	% endfor
       </ul>

@@ -1,12 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-定义了一个新的directive: sh 和一个新的writer： myhtml
+defined a new directive: sh and a new writer： myhtml
 
 """
 
 #========================================================================================
-# 自定义detective: 语法高亮
 # Directive Type:	"sh" (SyntaxHighlighting)
 # Doctree Element:	literal_block
 # Directive Arguments:	one
@@ -32,16 +31,16 @@ def syntax_highlighting(name, arguments, options, content, lineno,
     return [node]
 
 #parsed_literal.options = {'class': directives.class_option}
-syntax_highlighting.content = True         #有content
+syntax_highlighting.content = True         #we have content
 syntax_highlighting.arguments = (1, 0, 1)  #(required_arguments,optional_arguments,final_argument_whitespace)
 
-#注册
+#register the new directive
 directives.register_directive("sh",syntax_highlighting)
 #========================================================================================
 
 #========================================================================================
-# 自定义writer: 继承自 html4css1
-# 可以识别自定义directive: sh的结果
+# new writer: inherited from html4css1
+# it recognize output of the new directive: sh
 from docutils.writers.html4css1 import Writer,HTMLTranslator
 from docutils import writers
 

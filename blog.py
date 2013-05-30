@@ -98,9 +98,8 @@ class MyRequestHandler(webapp.RequestHandler):
             else:
                 if DEBUG:
                     for k in template_vars.keys():
-                        logging.info("%s=%s"%(k,template_vars[k]))
-                        
-                        output = template.render(**template_vars) #unpacking the dict
+                        logging.info("%s=%s"%(k,template_vars[k]))                        
+                output = template.render(**template_vars) #unpacking the dict
 
             if write_out:
                 self.response.out.write(output)
@@ -322,7 +321,7 @@ class ShowEntry(MyRequestHandler):
                 return
 
             template_values = {
-                'entry'     : entry,
+                'post'      : entry,
                 'user_url'  : user_url,
                 'user'      : user,
                 'highlight_keyword' : None,

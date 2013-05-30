@@ -16,7 +16,7 @@
   <h4 class="title">
      % if show_private(entry,logged_in_user):
        ##public entry or the private entry belongs to logged in user
-       <a href="/blog/${entry.entry_id}/" title="Click to read"> <img class="permalink" alt="permalink" src="/static/img/permalink.png" /></a>
+       <a href="/blog/${entry.entry_id}/" title="Click to read"> <img class="permalink" alt="permalink" src="/static/img/permalink.png" /> ${entry.title}</a>
      % else:
        ##private entry
        <img class="permalink" alt="permalink" src="/static/img/permalink.png" />
@@ -33,14 +33,14 @@
            ${entry.text | render_markup_text(entry.format)}
          % endif
       % elif entry.text:
-         &nbsp; &nbsp; &bull;&nbsp;<a href="/blog/${entry.entry_id}">Read more &raquo;</a><p>
+         &nbsp; &nbsp; &bull;&nbsp;<a href="/blog/${entry.entry_id}/">Read more &raquo;</a><p>
       % endif
   % endif
 
  <div class="entry_tag" >
 
     &bull;
-    Posted by ${entry.owner.nickname} on ${entry.get_post_time}(${entry.get_post_time.tzname}) | last edited on ${entry.get_ledit_time}(${entry.get_ledit_time.tzname})
+    Posted by ${entry.owner.nickname} on ${entry.get_post_time()} | last edited on ${entry.get_ledit_time()}
     % if entry.owner.user_id == logged_in_user.user_id:
       | <a href="/edit/${entry.entry_id}/">Edit this article</a>
     % endif
@@ -51,9 +51,9 @@
     | <a href="/blog/${entry.entry_id}/#disqus_thread"></a>
     <br>
     &bull;
-    "Tags :"
-    % for t in entry.get_tags:
-      <span title="{{t.name}}">
+    Tags :
+    % for t in entry.get_tags():
+      <span title="%{t.name}">
         <a href="/tag/${t.normal}/">${t.name}</a>&#32;
       </span>
     % endfor

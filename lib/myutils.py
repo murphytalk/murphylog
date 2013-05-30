@@ -45,7 +45,9 @@ def myRestructuredtext(value):
     """
     safe_defaults = {'file_insertion_enabled': 0,
                      'raw_enabled': 0,
-                     '_disable_config': 1}
+                     '_disable_config': 1,
+                     'embed_stylesheet' : False,
+                     'template' : 'lib/template.txt'}
     parts = publish_parts(source=value, writer_name="myhtml", settings_overrides=safe_defaults)
     return processSmileys(parts["fragment"])
 
@@ -75,5 +77,4 @@ def BBCode(value):
 # ========== markup END ==================
 
 def same_date(datetime1,datetime2):
-    #return (date.year==pdate.year and date.month==pdate.month and date.day == pdate.day)
     return datetime1.date()==datetime2.date
