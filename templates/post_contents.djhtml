@@ -1,7 +1,0 @@
-{% load murphymarkup%}
-
-   	        {{ entry.subject|structuredtext}}
-             
-	        {% if entry.text %}
-	            &nbsp; &nbsp; &bull;<em><a href="/blog/{{entry.id}}">Read more &raquo;</a></em> 
-	        {% endif %}

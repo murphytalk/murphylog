@@ -1,5 +1,5 @@
-application: murphytalk-log
-version: 3
+application: murphy-log
+version: 1
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -19,6 +19,8 @@ skip_files:
 - .*\.sh
 - prepare_csv.py
 - .*\.csv
+- ^(.*/)?.*/\.idea/.*
+- ^(.*/)?.*\.iml
 
 libraries:
 - name : markupsafe
