@@ -1,7 +1,0 @@
-{% extends "index.djhtml" %}
-{% load i18n %}
-{% block taginfo%}
-<h3>{{tagobj.name}}
-:&nbsp; {% blocktrans with tagobj.count as hit%} {{hit}} posts {% endblocktrans %}
-</h2>
-{% endblock %}

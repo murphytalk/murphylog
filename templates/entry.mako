@@ -16,10 +16,11 @@
   <h4 class="title">
      % if show_private(entry,logged_in_user):
        ##public entry or the private entry belongs to logged in user
-       <a href="/blog/${entry.entry_id}/" title="Click to read"> <img class="permalink" alt="permalink" src="/static/img/permalink.png" /> ${entry.title}</a>
+       <a href="/blog/${entry.entry_id}/" title="Click to read"> <img class="permalink" alt="permalink" src="/static/img/permalink.png" /></a>
+       ${entry.title}
      % else:
        ##private entry
-       <img class="permalink" alt="permalink" src="/static/img/permalink.png" />
+       <img class="permalink" alt="permalink" src="/static/img/permalink.png" /> ${entry.title}
      % endif
      ## highlight matched search words ...
   </h4>

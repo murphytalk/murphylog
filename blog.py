@@ -21,7 +21,7 @@ from users import is_valid_user
 
 import logging
 
-DEBUG = True
+DEBUG = False
 
 TAG_MAX = 100
 
@@ -198,17 +198,23 @@ def logged_in_as_owner(method):
                 return
             self.error(403)
         else:
-            if kwargs.has_key('key'):
+            passed = False
+            if 'eid' in kwargs:
                 #check if the logged in user is the specified entry's owner
                 try:
-                    entry = Entry.get(key)
+                    entry = Entry.get(kwargs['eid'])
                 except datastore_errors.BadKeyError:
                     self.error(403)
                 if entry.owner.user_id() != user.user_id():
                     self.error(403)
+                else:
+                    passed = True
             elif not is_valid_user(user):
                 self.error(403)
             else:
+                passed = True
+
+            if passed:
                 return method(self, *args, **kwargs)
 
     return wrapper
