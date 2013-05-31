@@ -40,8 +40,8 @@
  <div class="entry_tag" >
 
     &bull;
-    Posted by ${entry.owner.nickname} on ${entry.get_post_time()} | last edited on ${entry.get_ledit_time()}
-    % if entry.owner.user_id == logged_in_user.user_id:
+    Posted by ${entry.owner.nickname()} on ${entry.get_post_time()} | last edited on ${entry.get_ledit_time()}
+    % if logged_in_user  and entry.owner.user_id == logged_in_user.user_id:
       | <a href="/edit/${entry.entry_id}/">Edit this article</a>
     % endif
 

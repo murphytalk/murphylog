@@ -4,13 +4,6 @@
 <link rel="stylesheet" type="text/css" href="/static/theme/scribbish/form.css" />
 </%block>
 
-<%!
-    def show_contents(c):
-        if c is None:
-            return ""
-        else:
-            return c
-%>
 ##==== body begins ====
 
 <form method="post" action=
@@ -26,7 +19,7 @@ method="post" class="cssform" id="update-entry-form">
   <label>Title</label>
   <input type="text" name="title" value=
     % if entry:
-         "${entry.title | u}"
+         "${entry.title}"
     % else:
          ""
     % endif
@@ -35,12 +28,20 @@ method="post" class="cssform" id="update-entry-form">
 
   <p>
   <label>Subject</label>
-  <textarea name="subject" rows="10" cols="80">${entry.subject}</textarea>
+<textarea name="subject" rows="10" cols="80">
+%if entry:
+${entry.subject}
+%endif
+</textarea>
   </p>
 
   <p>
   <label>Text</label>
-  <textarea name="text" rows="10" cols="80">${entry.text}</textarea>
+<textarea name="text" rows="10" cols="80">
+%if entry:
+${entry.text}
+%endif
+</textarea>
   </p>
 
   <p>
@@ -75,7 +76,7 @@ method="post" class="cssform" id="update-entry-form">
   <label>Tags</label>
   <input type="text" name="tags" value=
          % if entry and entry.tags:
-          "${entry.get_tags_as_str()|u}"
+          "${entry.get_tags_as_str()}"
          % else:
            ""
          % endif

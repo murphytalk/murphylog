@@ -47,7 +47,7 @@
              % if is_view:
                   &bull; <a href="/new/"> New post </a>
              % endif
-	     &bull; Logged in as ${user.nickname}
+	     &bull; Logged in as ${user.nickname()}
 	     &raquo; <a href="${user_url}"> Logout</a>
           % else: 
              &bull;  <a href="${user_url}"> Login </a>
