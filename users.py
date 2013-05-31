@@ -1,20 +1,22 @@
-__author__ = 'murphy'
+__author__ = 'murphytalk'
 
 import logging
 
 USERFILE = "users.txt"
 valid_users = set()
 
+
 def load_users(user_fname):
     global USERFILE
     global valid_users
     emails = open(USERFILE).readlines()
     for e in emails:
-        if e[0]=='#':
+        if e[0] == '#':
             continue
-        if e[-1]=='\n' or e[-1]=='\r':
+        if e[-1] == '\n' or e[-1] == '\r':
             e = e[0:-1]
             valid_users.add(e)
+
 
 def is_valid_user(user):
     global valid_users

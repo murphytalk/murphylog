@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 # coding=utf-8
 
-CONSUMER_KEY   ='2wuTKus9SVUm2SgpYxJcQ'
-CONSUMER_SECRET='TxeZ2Zrtvpyfs9QHLj9f7IkniwFPUIJ90gQ3FJH1g'
-OAUTH_FILENAME ='auth_token.txt'
+CONSUMER_KEY = '2wuTKus9SVUm2SgpYxJcQ'
+CONSUMER_SECRET = 'TxeZ2Zrtvpyfs9QHLj9f7IkniwFPUIJ90gQ3FJH1g'
+OAUTH_FILENAME = 'auth_token.txt'
 
 from twitter.api import Twitter, TwitterError
 from twitter.oauth import OAuth, write_token_file, read_token_file
 from twitter.oauth_dance import oauth_dance
 
 import sys
+
 sys.path.insert(0, 'lib/twitter.zip')
 
 import logging
@@ -22,9 +23,9 @@ import logging
 def get_twitter(need_auth=False):
     if need_auth:
         oauth_token, oauth_token_secret = read_token_file(OAUTH_FILENAME)
-        auth=OAuth(oauth_token, oauth_token_secret, CONSUMER_KEY, CONSUMER_SECRET)
+        auth = OAuth(oauth_token, oauth_token_secret, CONSUMER_KEY, CONSUMER_SECRET)
     else:
-        auth=None
+        auth = None
 
     twitter = Twitter(
         auth=auth,
@@ -34,11 +35,13 @@ def get_twitter(need_auth=False):
 
     return twitter
 
+
 def get_my_tweets():
     twitter = get_twitter()
-    tweets = twitter.statuses.user_timeline(user_id="murpytalk",count=5)
+    tweets = twitter.statuses.user_timeline(user_id="murpytalk", count=5)
     for t in tweets:
         logging.info(t)
+
 
 def get_my_twitter_profile():
     twitter = get_twitter()

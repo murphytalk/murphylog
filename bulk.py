@@ -1,8 +1,9 @@
-from google.appengine.ext   import db
+from google.appengine.ext import db
 from google.appengine.tools import bulkloader
-from google.appengine.api   import users
+from google.appengine.api import users
 import datetime
 import model
+
 """
 steps to import:
 
@@ -29,45 +30,48 @@ cmd upload_data --kind=Entry --filename=entry.csv
 
 """
 
+
 def export_list(tag_lst):
-    tags_key=''
+    tags_key = ''
     for t in tag_lst:
-        tags_key += str(t)+';' # t is a Key obj
+        tags_key += str(t) + ';' # t is a Key obj
     tags_key = tags_key[:-1]
     return tags_key
 
 
 class EntryExporter(bulkloader.Exporter):
     def __init__(self):
-        bulkloader.Exporter.__init__(self,'Entry',
-                                     [('entry_id' ,str,None),
-                                      ('title'    ,lambda x: x.encode('utf-8'),None),
-                                      ('subject'  ,lambda x: x.encode('utf-8'),None),
-                                      ('text'     ,lambda x: x.encode('utf-8'),None),
-                                      ('owner'    ,lambda x: x.email()        ,None),
-                                      ('private'  ,str,None),
-                                      ('format'   ,str,None),
-                                      ('post_time',lambda x: x.strftime('%Y-%m-%d %H:%M:%S'),None),
-                                      ('last_edit',lambda x: x.strftime('%Y-%m-%d %H:%M:%S'),None),
-                                      ('tags'     ,export_list,None)])
+        bulkloader.Exporter.__init__(self, 'Entry',
+                                     [('entry_id', str, None),
+                                      ('title', lambda x: x.encode('utf-8'), None),
+                                      ('subject', lambda x: x.encode('utf-8'), None),
+                                      ('text', lambda x: x.encode('utf-8'), None),
+                                      ('owner', lambda x: x.email(), None),
+                                      ('private', str, None),
+                                      ('format', str, None),
+                                      ('post_time', lambda x: x.strftime('%Y-%m-%d %H:%M:%S'), None),
+                                      ('last_edit', lambda x: x.strftime('%Y-%m-%d %H:%M:%S'), None),
+                                      ('tags', export_list, None)])
 
 
 class TagExporter(bulkloader.Exporter):
     def __init__(self):
-        bulkloader.Exporter.__init__(self,'Tag',
-                                     [('__key__'  ,str,None),
-                                      ('name'     ,str,None),
-                                      ('normal'   ,str,None),
-                                      ('count'    ,str,None)])
+        bulkloader.Exporter.__init__(self, 'Tag',
+                                     [('__key__', str, None),
+                                      ('name', str, None),
+                                      ('normal', str, None),
+                                      ('count', str, None)])
 
 
-exporters = [EntryExporter,TagExporter]
+exporters = [EntryExporter, TagExporter]
+
 
 def import_boolean(bstr):
     if bstr == 'True':
         return True
     else:
         return False
+
 
 def import_list(tag_keyname):
     lst = []
@@ -76,32 +80,36 @@ def import_list(tag_keyname):
         lst.append(db.Key(t))
     return lst
 
+
 class EntryImporter(bulkloader.Loader):
     def __init__(self):
-        bulkloader.Loader.__init__(self,'Entry' ,
-                                   [('entry_id' ,int),
-                                    ('title'    ,lambda x: x.decode('utf-8')),
-                                    ('subject'  ,lambda x: x.decode('utf-8')),
-                                    ('text'     ,lambda x: x.decode('utf-8')),
-                                    ('owner'    ,lambda x: users.User(x)),
-                                    ('private'  ,import_boolean),
-                                    ('format'   ,str),
-                                    ('post_time',lambda x: datetime.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')),
-                                    ('last_edit',lambda x: datetime.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')),
-                                    ('tags'     ,import_list)])
+        bulkloader.Loader.__init__(self, 'Entry',
+                                   [('entry_id', int),
+                                    ('title', lambda x: x.decode('utf-8')),
+                                    ('subject', lambda x: x.decode('utf-8')),
+                                    ('text', lambda x: x.decode('utf-8')),
+                                    ('owner', lambda x: users.User(x)),
+                                    ('private', import_boolean),
+                                    ('format', str),
+                                    ('post_time', lambda x: datetime.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')),
+                                    ('last_edit', lambda x: datetime.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')),
+                                    ('tags', import_list)])
+
 
 class TagImporter(bulkloader.Loader):
     def __init__(self):
-        bulkloader.Loader.__init__(self,'Tag',
-                                   [('name'  ,str),
-                                    ('normal',str),
-                                    ('count' ,int)])
+        bulkloader.Loader.__init__(self, 'Tag',
+                                   [('name', str),
+                                    ('normal', str),
+                                    ('count', int)])
+
 
 class ArchiveImporter(bulkloader.Loader):
     def __init__(self):
-        bulkloader.Loader.__init__(self,'Archive',
-                                   [('date'    ,str),
-                                    ('count'   ,int),
-                                    ('entry_id',int)])
+        bulkloader.Loader.__init__(self, 'Archive',
+                                   [('date', str),
+                                    ('count', int),
+                                    ('entry_id', int)])
 
-loaders = [EntryImporter,TagImporter,ArchiveImporter]
+
+loaders = [EntryImporter, TagImporter, ArchiveImporter]
