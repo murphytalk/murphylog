@@ -1,3 +1,4 @@
+## -*- coding: utf-8 -*-
 <?xml version="1.0" encoding="utf-8"?>
 <%! from filters import render_markup_text %>
 <feed xmlns="http://www.w3.org/2005/Atom">
@@ -17,7 +18,7 @@
 	<published>${ entry.post_time.strftime("%Y-%m-%dT%H:%m:%SZ") }</published>
 	<updated>${ entry.last_edit.strftime("%Y-%m-%dT%H:%m:%SZ") }</updated>
 	<author>
-		<name>${ entry.owner.nickname }</name>
+		<name>${ entry.owner.nickname() }</name>
 		<uri>http://${ site_domain }/</uri>
 	</author>
 	<content type="html" xml:base="http://${ site_domain }/" xml:lang="en"><![CDATA[

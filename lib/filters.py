@@ -5,7 +5,7 @@ import logging
 log = logging.getLogger(__name__)
 
 def get_date_from_datetime(dt):
-    logging.info("getting date from :%s",dt)
+    #logging.info("getting date from :%s",dt)
     return dt[:10]
 
 WEEKDAYS = {
@@ -26,7 +26,7 @@ def render_markup_text(text_type):
     text_type  格式化文本类型
     """
     def markup(text):
-        log.info("rendering structured txt,text type is %s",text_type)
+        #log.info("rendering structured txt,text type is %s",text_type)
         if text_type == "rs":
             return myRestructuredtext(text)
         elif text_type == "st":
@@ -41,7 +41,7 @@ def highlight(keywords):
     highlighting
     """
     def do_highlight(text):
-        log.debug("highlighting keywords [%s]",keywords)
+        #log.debug("highlighting keywords [%s]",keywords)
         if keywords is not None:
             regex=re.compile('('+keywords+')',re.I)#case insensitive
             found=regex.search(text)

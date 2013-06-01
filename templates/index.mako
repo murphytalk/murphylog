@@ -17,9 +17,9 @@ from myutils import same_date
   % for p in entries:
       % if date is None or not same_date(p.post_time,date):
         <h3 class="date">
-           ${p.post_time|n,weekday}
+           ${p.get_post_time()|n,weekday}
            <br>
-           ${p.post_time|get_date_from_datetime}
+           ${p.get_post_time()|get_date_from_datetime}
         </h3>
       % endif
 
