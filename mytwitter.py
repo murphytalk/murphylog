@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # coding=utf-8
 
-CONSUMER_KEY = '2wuTKus9SVUm2SgpYxJcQ'
-CONSUMER_SECRET = 'TxeZ2Zrtvpyfs9QHLj9f7IkniwFPUIJ90gQ3FJH1g'
+CONSUMER_KEY = 'cxxkey'
+CONSUMER_SECRET = 'cxxsecret'
 OAUTH_FILENAME = 'auth_token.txt'
 
 from twitter.api import Twitter, TwitterError
