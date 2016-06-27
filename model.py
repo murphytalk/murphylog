@@ -152,12 +152,9 @@ class Entry(db.Model):
     #    def __str__(self):
     #        return self.title
 
-    def get_tags_as_str(self):
-        tags = ""
-        for tk in self.tags:
-            tag = Tag.get(tk)
-            tags = "%s %s" % (tags, tag.name)
-        return tags
+    def get_tags_as_str(self, sep=" "):
+        tags = [Tag.get(tk) for tk in self.tags]
+        return sep.join([x.name for x in tags])
 
     def get_tags(self):
         tags = []
