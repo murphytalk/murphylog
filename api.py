@@ -11,10 +11,13 @@ from model import *
 from google.appengine.ext.remote_api import remote_api_stub
 
 def download_entry(project_id,entry_id):
-    def gen_filename(d):
-        #print d
-        return "%04d%02d%02d-%02d%02d.%s"%(d.year,d.month,d.day,d.hour,d.minute,'rst' if entry.format <> 'bb' else 'md')
+    def is_rst(entry):
+        return entry.format <> 'bb'
 
+    def gen_filename(d,rst,private):
+        name = "%04d%02d%02d-%02d%02d.%s"%(d.year,d.month,d.day,d.hour,d.minute,'rst' if rst else 'md')
+        return ("private-%s" % name) if private else name
+    
     def gen_category(tags):
         if 'DayDream' in tags:
             return 'Misc'
@@ -28,19 +31,39 @@ def download_entry(project_id,entry_id):
             return 'Memo'
         return 'Computer'
 
+    def write_title(f,rst,t):
+        if rst:
+            tline = '#'*(2*len(t))
+            f.write('%s\n'%tline)
+            f.write('%s\n'%t)
+            f.write('%s\n'%tline)
+        else:
+            f.write('Title: %s\n'%t)
+
+    def write_tags(f,rst,t):
+        f.write( (':tags: %s\n' if rst else 'Tags: %s\n') % t)
+
+    def write_category(f,rst,c):
+        f.write((':category: %s\n' if rst else 'Category: %s\n') % c)
+
+    def write_date(f,rst,y,M,d,h,m):
+        f.write((':date: %04d-%02d-%02d %02d:%02d\n\n' if rst else 'Date: %04d-%02d-%02d %02d:%02d\n\n') %(y,M,d,h,m))
 
     remote_api_stub.ConfigureRemoteApiForOAuth(
         '{}.appspot.com'.format(project_id),'/_ah/remote_api')
+
     entry = Entry.get(entry_id)
     if entry is None:
         print "None entry for id %s"%entry_id
     else:
         d = entry.last_edit + timedelta(hours=9)
-        file = codecs.open(gen_filename(d),'w','utf-8')
-        file.write('Title: %s\n'%entry.title)
-        file.write('Category: %s\n'%gen_category(entry.tags))
-        file.write('Tags: %s\n'%entry.get_tags_as_str(','))
-        file.write('Date: %04d-%02d-%02d %02d:%02d\n'%(d.year,d.month,d.day,d.hour,d.minute))
+        rst = is_rst(entry)
+        file = codecs.open(gen_filename(d,rst,entry.private),'w','utf-8')
+
+        write_title(file,rst,entry.title)
+        write_category(file,rst,gen_category(entry.tags))
+        write_tags(file,rst,entry.get_tags_as_str(','))
+        write_date(file,rst,d.year,d.month,d.day,d.hour,d.minute)
         file.write('\n\n%s\n\n%s'%(entry.subject,entry.text))
         file.close()
 
