@@ -154,7 +154,8 @@ class Entry(db.Model):
 
     def get_tags_as_str(self, sep=" "):
         tags = [Tag.get(tk) for tk in self.tags]
-        return sep.join([x.name for x in tags])
+        names = [x.name for x in tags]
+        return  (names if sep is None else sep.join(names))
 
     def get_tags(self):
         tags = []

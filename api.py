@@ -6,6 +6,7 @@ except ImportError:
     raise
 
 import codecs
+import sys, os
 from datetime import timedelta 
 from model import *
 from google.appengine.ext.remote_api import remote_api_stub
@@ -15,7 +16,13 @@ def download_entry(project_id,entry_id):
         return entry.format <> 'bb'
 
     def gen_filename(d,rst,private):
-        name = "%04d%02d%02d-%02d%02d.%s"%(d.year,d.month,d.day,d.hour,d.minute,'rst' if rst else 'md')
+        count = 1
+        while(True):
+            name = "%04d%02d%02d-%02d%02d-%d.%s"%(d.year,d.month,d.day,d.hour,d.minute,count,'rst' if rst else 'md')
+            if os.path.isfile(name):
+                count+=1
+            else:
+                break
         return ("private-%s" % name) if private else name
     
     def gen_category(tags):
@@ -56,17 +63,23 @@ def download_entry(project_id,entry_id):
     if entry is None:
         print "None entry for id %s"%entry_id
     else:
-        d = entry.last_edit + timedelta(hours=9)
+        d = entry.post_time + timedelta(hours=9)
         rst = is_rst(entry)
         file = codecs.open(gen_filename(d,rst,entry.private),'w','utf-8')
 
         write_title(file,rst,entry.title)
-        write_category(file,rst,gen_category(entry.tags))
+        write_category(file,rst,gen_category(entry.get_tags_as_str(None)))
         write_tags(file,rst,entry.get_tags_as_str(','))
         write_date(file,rst,d.year,d.month,d.day,d.hour,d.minute)
-        file.write('\n\n%s\n\n%s'%(entry.subject,entry.text))
+        file.write('\n\n%s\n\n%s'%(entry.subject,'' if entry.text is None else entry.text))
         file.close()
 
 if __name__ == '__main__':
-    eid = 1
-    download_entry('murphy-log',str(eid))
+    if len(sys.argv)!=3:
+        print "need 2 arguments: start entry id , end entry id"
+    else:
+        id1 = int(sys.argv[1])
+        id2 = int(sys.argv[2])
+        for eid in range(id1,id2+1):
+            print "downloading entry #%d ..."%eid
+            download_entry('murphy-log',str(eid))
