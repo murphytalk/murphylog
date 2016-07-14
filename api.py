@@ -15,14 +15,8 @@ def download_entry(project_id,entry_id):
     def is_rst(entry):
         return entry.format <> 'bb'
 
-    def gen_filename(d,rst,private):
-        count = 1
-        while(True):
-            name = "%04d%02d%02d-%02d%02d-%d.%s"%(d.year,d.month,d.day,d.hour,d.minute,count,'rst' if rst else 'md')
-            if os.path.isfile(name):
-                count+=1
-            else:
-                break
+    def gen_filename(eid,d,rst,private):
+        name = "%04d%02d%02d-%02d%02d-%s.%s"%(d.year,d.month,d.day,d.hour,d.minute,eid,'rst' if rst else 'md')
         return ("private-%s" % name) if private else name
     
     def gen_category(tags):
@@ -65,7 +59,7 @@ def download_entry(project_id,entry_id):
     else:
         d = entry.post_time + timedelta(hours=9)
         rst = is_rst(entry)
-        file = codecs.open(gen_filename(d,rst,entry.private),'w','utf-8')
+        file = codecs.open(gen_filename(entry_id,d,rst,entry.private),'w','utf-8')
 
         write_title(file,rst,entry.title)
         write_category(file,rst,gen_category(entry.get_tags_as_str(None)))
